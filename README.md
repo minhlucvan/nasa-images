@@ -27,4 +27,4 @@ GET https://images-api.nasa.gov/search?q={q}
 
 ### 6. Deploy your application to https://pages.github.com/ or any server that you have
 
-### 7. Send the Git URL with the workable product back to hr@nfq.asia
+### 7. Push the code to git.nfq.asia. For more information please contact hr@nfq.asia
