@@ -1,42 +1,24 @@
-import React, { useContext, useCallback, Fragment } from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
-
-import config from '~config';
+import React, { Fragment } from 'react';
+import { Switch, Redirect, useRouteMatch, Route } from 'react-router-dom';
 
 import { useNasaContext } from './NasaContext';
 
-import ExploreContainer from './Explore/ExploreContainer';
-import CollectionContainer from './Collection/CollectionContainer';
-import AssetContainer from './Asset/AssetContainer';
+import AssetPage from './Asset';
+import CollectionPage from './Collection';
+import ExplorePage from './Explore';
 
-export const NasaContainer = ({ children }) => {
+export const NasaContainer = () => {
 	const context = useNasaContext();
+	const { path } = useRouteMatch();
+
 	return (
-		<Fragment>
-			abc---------------
-			<Switch context="router">
-				<Redirect
-					from='/'
-					to='/explore' />
-				<Route exact
-					path='/explore'
-					conponent={ExploreContainer}>
-					<Route
-						path='/asset'
-						component={AssetContainer}>
-					</Route>
-				</Route>
-				<Route exact
-					path='/collection'
-					component={CollectionContainer}>
-					<Route
-						path='/asset'
-						component={AssetContainer}>
-					</Route>
-				</Route>
-				<Redirect to='/' />
-			</Switch>
-		</Fragment>
+		<Switch>
+			<Redirect exact from={`${path}/`} to={`${path}/explore`} />
+			<Route exact path={`${path}/explore`} component={ExplorePage} />
+			<Route exact path={`${path}/collection`} component={CollectionPage}></Route>
+			<Route exact path={`${path}/*/asset/:assetId`} component={AssetPage}></Route>
+			<Redirect exact to={`${path}/`} />
+		</Switch>
 	);
 };
 
