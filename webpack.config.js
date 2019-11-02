@@ -213,6 +213,18 @@ module.exports = (env, options) => ({
 		],
 	},
 	plugins: [
+		new webpack.NormalModuleReplacementPlugin('/src/main/config/*.js', ((resource) => {
+			if (env === 'production') {
+				try {
+					const prodRes = resource.request.replace('.js', `.${env}.js`);
+					// eslint-disable-next-line
+					require(prodRes);
+					resource.request = prodRes;
+				} catch (e) {
+					// DO NOTHING
+				}
+			}
+		})),
 		new MiniCssExtractPlugin({
 			filename: `assets/css/${filenames.css}`,
 		}),
