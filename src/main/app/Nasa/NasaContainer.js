@@ -9,15 +9,13 @@ import ExplorePage from './Explore';
 
 export const NasaContainer = () => {
 	const context = useNasaContext();
-	const { path } = useRouteMatch();
 
 	return (
 		<Switch>
-			<Redirect exact from={`${path}/`} to={`${path}/explore`} />
-			<Route exact path={`${path}/explore`} component={ExplorePage} />
-			<Route exact path={`${path}/collection`} component={CollectionPage}></Route>
-			<Route exact path={`${path}/*/asset/:assetId`} component={AssetPage}></Route>
-			<Redirect exact to={`${path}/`} />
+			<Route exact path='/explore' component={(ExplorePage)} />
+			<Route exact path='/collection' component={CollectionPage} />
+			<Route exact path='/*/asset/:assetId' component={AssetPage} />
+			<Redirect to='/explore' />
 		</Switch>
 	);
 };

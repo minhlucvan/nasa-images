@@ -9,7 +9,7 @@ const AppRoutes = () => (
 	<Switch>
 		<Route exact path='/about' component={AboutPage}></Route>
 		<Route exact path="/home" component={HomePage} />
-		<Route exact path='/' component={NasaPage} />
+		<Route path='/' component={NasaPage} />
 		<Redirect to='/' />
 	</Switch>
 );

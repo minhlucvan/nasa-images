@@ -4,11 +4,11 @@ const Context = React.createContext();
 
 export const useAssetContext = () => useContext(Context);
 
-export const AssetContext = ({ children }) => {
+export const AssetContext = (props) => {
 	const context = {};
 	return (
 		<Context.Provider value={context} >
-			{children}
+			{props.children}
 		</Context.Provider>
 	);
 };
