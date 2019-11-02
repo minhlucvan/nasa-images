@@ -1,0 +1,40 @@
+{
+  "env": {
+    "amd": true,
+    "es6": true,
+    "node": true,
+    "jest": true,
+    "browser": true,
+    "commonjs": false
+  },
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 6
+  },
+  "plugins": ["react"],
+  "extends": ["airbnb-base"],
+  "rules": {
+    "object-curly-newline": "off",
+    "linebreak-style": 0,
+    "no-tabs": 0,
+    "no-unused-vars": 0,
+    "indent": [
+      2,
+      "tab",
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "max-len": 0,
+    "import/extensions": "off",
+    "import/no-unresolved": "off",
+    "import/no-named-as-default": 0,
+    "no-console": "off",
+    "no-param-reassign": [
+      2,
+      {
+        "props": false
+      }
+    ]
+  }
+}
