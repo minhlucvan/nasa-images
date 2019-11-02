@@ -2,10 +2,10 @@ import 'raf/polyfill';
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import configureStore from '~store/configureStore';
 import registerServiceWorker from '~helpers/registerServiceWorker';
+import AppContext from './context/AppContext';
 
 import './scss/global';
 
@@ -17,11 +17,9 @@ console.log(`%c${packageJson.author.name} version: ${packageJson.version}`, 'bac
 const store = configureStore();
 
 const renderApp = () => (
-	<Provider store={store}>
-		<BrowserRouter>
-			<App />
-		</BrowserRouter>
-	</Provider>
+	<AppContext store={store}>
+		<App />
+	</AppContext>
 );
 
 

@@ -162,14 +162,14 @@ module.exports = (env, options) => ({
 		],
 	},
 	resolve: {
-    extensions: ['*', '.jsx', '.js', '.scss', '.css', '.html'],
-    alias: {
-        "~root": path.resolve(__dirname, "."),
-        "~components": path.resolve(__dirname, "src/main/lib/components"),
-        "~config": path.resolve(__dirname, "src/main/config"),
-        "~store": path.resolve(__dirname, "src/main/redux/store"),
-        "~helpers": path.resolve(__dirname, "src/main/lib/helpers")
-    },
+		extensions: ['*', '.jsx', '.js', '.scss', '.css', '.html'],
+		alias: {
+			'~root': path.resolve(__dirname, '.'),
+			'~components': path.resolve(__dirname, 'src/main/lib/components'),
+			'~config': path.resolve(__dirname, 'src/main/config'),
+			'~store': path.resolve(__dirname, 'src/main/redux/store'),
+			'~helpers': path.resolve(__dirname, 'src/main/lib/helpers'),
+		},
 	},
 	performance: {
 		hints: false,
@@ -243,7 +243,7 @@ module.exports = (env, options) => ({
 				force: true,
 				cache: true,
 				to: 'assets/img',
-				from: 'src/assets/img/compressed',
+				from: 'src/assets/img',
 			},
 			{
 				force: true,

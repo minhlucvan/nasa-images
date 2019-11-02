@@ -48,7 +48,7 @@ function checkValidServiceWorker(swUrl) {
 				registerValidSW(swUrl);
 			}
 		})
-		.catch((error) => console.error('No internet connection found. Scheduler is running in offline mode. ', error));
+		.catch((error) => console.error('No internet connection found. Nasa Images is running in offline mode. ', error));
 }
 
 const unregister = () => {
