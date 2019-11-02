@@ -2,6 +2,7 @@ import 'raf/polyfill';
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import config from '~config';
 import registerServiceWorker from '~helpers/registerServiceWorker';
 import AppContext from './context/AppContext';
 import createStore from './redux';
@@ -16,7 +17,7 @@ console.log(`%c${packageJson.author.name} version: ${packageJson.version}`, 'bac
 const store = createStore();
 
 const renderApp = () => (
-	<AppContext store={store}>
+	<AppContext store={store} config={config}>
 		<App />
 	</AppContext>
 );
