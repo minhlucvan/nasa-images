@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { compose } from 'redux';
-import { withLoader } from '~redux/loading';
 
 export default (api) => {
 	const [data, setData] = useState(null);
@@ -8,7 +7,7 @@ export default (api) => {
 	const [input, setInput] = useState(null);
 	const [isLoading, setIsloading] = useState(false);
 
-	const doCall = (payload) => {
+	const call = (payload) => {
 		setData(null);
 		setInput(null);
 		setIsloading(true);
@@ -21,8 +20,6 @@ export default (api) => {
 			.catch(setError)
 			.finally(() => setIsloading(false));
 	};
-
-	const call = compose(withLoader, doCall);
 
 	return {
 		call,

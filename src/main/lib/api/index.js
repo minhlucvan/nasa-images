@@ -1,5 +1,5 @@
 import createNasaClient from './nasa';
 
-export default ({ NASA }) => ({
-	nasa: createNasaClient(NASA),
+export default ({ API }) => ({
+	nasa: createNasaClient(API.NASA),
 });

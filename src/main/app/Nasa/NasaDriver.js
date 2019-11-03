@@ -1,23 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { useRouteMatch } from 'react-router-dom';
 import useRemoteDriver from './NasaRemoteDriver';
 import useLocalDriver from './NasaLocalDriver';
 
-export const useDriver = () => {
-	const { path } = useRouteMatch();
-	const [driver, setDriver] = useState();
+export const useDriver = (pathname) => {
+	const [driver, setDriver] = useState(pathname);
 
-	useEffect(() => {
+	const refresherDriver = (path) => {
 		if (path && path.includes('explore')) {
 			setDriver(useRemoteDriver());
 		}
 		if (path && path.includes('collection')) {
 			setDriver(useLocalDriver());
 		}
-		return () => { };
-	}, [path]);
+	};
 
-	return [driver];
+	useEffect(() => {
+		refresherDriver(pathname);
+		return () => { };
+	}, [pathname]);
+
+	return [driver, refresherDriver];
 };
 
 

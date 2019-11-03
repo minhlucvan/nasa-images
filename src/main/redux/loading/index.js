@@ -18,19 +18,27 @@ export const initialState = {
 export const reducer = createReducer(
 	initialState,
 	{
-		[actions.startLoad]: (state) => update(state, { indicators: { $set: state.indicators + 1 } }),
-		[actions.stopLoad]: (state) => update(state, { indicators: { $set: state.indicators > 0 ? state.indicators - 1 : 0 } }),
+		[actions.startLoad]: (state) => {
+			state.indicators += 1;
+		},
+		[actions.stopLoad]: (state) => {
+			state.indicators -= 1;
+		},
 	},
 );
 
 
-export const withLoader = (task) => {
-	const dispatch = useDispatch();
+export const withLoader = (task, dispatch) => (payload) => {
 	dispatch(actions.startLoad());
-	return task()
+	return task(payload)
 		.finally(() => {
 			dispatch(actions.stopLoad());
 		});
+};
+
+export const useLoading = ({ dispatch }) => {
+	const load = (task) => withLoader(task, dispatch);
+	return [load];
 };
 
 export const selectors = {

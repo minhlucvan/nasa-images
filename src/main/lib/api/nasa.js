@@ -4,7 +4,7 @@ import qs from 'qs';
 export default ({ SCHEMA, HOST, SEARCH, token }) => {
 	const BASE_URL = `${SCHEMA}://${HOST}`;
 	return {
-		search: ({ term: q }) => axios({
+		search: (q) => axios({
 			method: 'get',
 			url: `${BASE_URL}/${SEARCH}`,
 			params: {

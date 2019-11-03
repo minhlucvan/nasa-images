@@ -1,12 +1,9 @@
 import React, { useContext, useCallback, Fragment } from 'react';
 import Explore from './Explore';
+import { useNasaContext } from '../NasaContext';
 
-export const ExploreContainer = ({ children }) => {
-	const a = 1;
-	return (
-		<Explore>
-		</Explore>
-	);
-};
+export const ExploreContainer = () => (
+	<Explore />
+);
 
 export default ExploreContainer;

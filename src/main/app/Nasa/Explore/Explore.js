@@ -1,9 +1,13 @@
-import React, { useContext, useCallback, Fragment } from 'react';
+import React, { useContext, useCallback, Fragment, useEffect } from 'react';
 import { useNasaContext } from '../NasaContext';
 
-export const Explore = ({ children }) => {
-	const context = useNasaContext();
-	context.handlerSearch('abc');
+export const Explore = () => {
+	const { handlerSearch } = useNasaContext();
+
+	useEffect(() => {
+		handlerSearch('abc');
+	}, [handlerSearch]);
+
 	return (
 		<Fragment>
 			Explore

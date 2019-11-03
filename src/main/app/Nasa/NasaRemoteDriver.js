@@ -1,11 +1,9 @@
-import api from '~api';
-import { useAppContext } from '../../context/AppContext';
+import { useState } from 'react';
 
-export const useRemoteDriver = () => {
-	const { apiClient } = useAppContext(api.search);
-
+export const useRemoteDriver = ({ apiClient, withLoading }) => {
+	const a = 1;
 	return {
-		search: apiClient.nasa.search,
+		search: withLoading(apiClient.nasa.search),
 	};
 };
 
