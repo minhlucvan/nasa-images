@@ -1,9 +1,11 @@
 import React, { useContext, useCallback, Fragment } from 'react';
 import Explore from './Explore';
-import { useNasaContext } from '../NasaContext';
+import { PageLayout } from '~components/layout/PageLayout';
 
 export const ExploreContainer = () => (
-	<Explore />
+	<PageLayout>
+		<Explore />
+	</PageLayout>
 );
 
 export default ExploreContainer;

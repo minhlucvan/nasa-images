@@ -1,0 +1,17 @@
+.Footer {
+	padding: .8rem;
+    font-size: .75rem;
+    text-align: center;
+    color: #b5b5b5;
+    background: #fff;
+    border-top: 1px solid #dae0e4;
+    -webkit-box-shadow: 0 -1px 6px rgba(0,0,0,.05);
+	box-shadow: 0 -1px 6px rgba(0,0,0,.05);
+	.FooterWraper {
+		width: 100%;
+    	max-width: 1024px;
+    	margin: auto;
+		padding: 0 1rem;
+		text-align: right;
+	}
+}

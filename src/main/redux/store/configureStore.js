@@ -1,14 +1,12 @@
 import reduce from 'lodash/reduce';
 import thunk from 'redux-thunk';
 /* import { logger } from 'redux-logger'; */
-import { compose, createStore, applyMiddleware, combineReducers } from 'redux';
+import { compose, createStore, applyMiddleware } from 'redux';
+import combineReducers from './combineReducers';
+import combineStates from './combineStates';
 import initialState from './initialState';
 
 const middlewares = [thunk];
-
-const createReducer = (modules) => combineReducers(reduce(modules, (r, v, k) => ({ [k]: v.reducer, ...r }), {}));
-
-const combinedStates = (defaultState, modules) => ({ ...defaultState, ...reduce(modules, (r, v, k) => ({ [k]: v.initialState, ...r }), {}) });
 
 /*
 if (process.env.NODE_ENV === 'development') {
@@ -21,8 +19,8 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 /* eslint-enable no-underscore-dangle */
 
 const configureStore = (modules) => createStore(
-	createReducer(modules),
-	combinedStates(initialState, modules),
+	combineReducers(modules),
+	combineStates(initialState, modules),
 	composeEnhancers(
 		applyMiddleware(...middlewares),
 	),

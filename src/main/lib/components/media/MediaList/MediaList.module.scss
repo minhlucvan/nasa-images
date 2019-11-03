@@ -1,0 +1,23 @@
+.MediaList {
+	column-count: 3;
+	margin: auto;
+    padding: 0;
+	column-gap: 1rem;
+	transition: all 0.6s;
+	
+	&.loadded {
+		opacity: 1;
+	}
+
+	&.loading {
+		opacity: 1;
+	}
+
+	.MediaListItem {
+		position: relative;
+		display: block;
+		width: 100%;
+		margin: 0 0 1rem;
+		break-inside: avoid-column;
+	}
+}

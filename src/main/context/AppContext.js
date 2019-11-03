@@ -12,18 +12,22 @@ const Context = React.createContext();
 
 export const useAppContext = () => useContext(Context);
 
-export const AppContext = ({ store: storeInstance, config: appConfig, children }) => {
-	const [store] = useState(storeInstance);
+export const AppContext = ({ redux, config, children }) => {
+	const [store] = useState(redux.store);
+	const [selectors] = useState(redux.selectors);
 	const [withLoading] = fromLoading.useLoading({ dispatch: store.dispatch });
-	const [apiClient, refreshClient] = useApiClient(appConfig || {});
+	const [apiClient, refreshClient] = useApiClient(config || {});
 
 	useEffect(() => {
-		store.dispatch(fromConfig.actions.loadConfig(appConfig));
-		refreshClient(appConfig || {});
-	}, [store, appConfig]);
+		store.dispatch(fromConfig.actions.loadConfig(config));
+		refreshClient(config || {});
+	}, [store, config]);
+
 	const state = {
-		store,
 		dispatch: store.dispatch,
+		store,
+		config,
+		selectors,
 		apiClient,
 		withLoading,
 	};

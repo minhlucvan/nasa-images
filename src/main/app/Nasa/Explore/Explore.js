@@ -1,17 +1,16 @@
 import React, { useContext, useCallback, Fragment, useEffect } from 'react';
-import { useNasaContext } from '../NasaContext';
+import { useSelector } from 'react-redux';
+import { MediaList } from '~components/media';
+import { useAppContext } from '../../../context/AppContext';
 
 export const Explore = () => {
-	const { handlerSearch } = useNasaContext();
-
-	useEffect(() => {
-		handlerSearch('abc');
-	}, [handlerSearch]);
+	const appContext = useAppContext();
+	const assets = useSelector(appContext.selectors.nasa.assets.items);
 
 	return (
-		<Fragment>
-			Explore
-		</Fragment>
+		<div>
+			<MediaList items={assets}></MediaList>
+		</div>
 	);
 };
 

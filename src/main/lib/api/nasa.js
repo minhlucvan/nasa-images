@@ -12,8 +12,18 @@ export default ({ SCHEMA, HOST, SEARCH, token }) => {
 			},
 			paramsSerializer: (params) => qs.stringify(params),
 		}).then((response) => ({
-			data: response.data.collection.items,
 			meta: response.data.collection.metadata,
+			data: response.data.collection.items
+				.filter((item) => item && item.links && item.links[0] && item.links[0].href)
+				.map((item) => {
+					const info = item.data ? item.data[0] : {};
+					const link = item.links ? item.links[0] : {};
+					item.info = info;
+					item.link = link;
+					item.caption = info.title || '';
+					item.thumbnail = link.href || '';
+					return item;
+				}),
 		})),
 	};
 };

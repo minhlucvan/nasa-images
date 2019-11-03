@@ -1,20 +1,24 @@
-import { combineReducers } from 'redux';
 import * as options from './options';
 import * as assets from './assets';
+import combineReducers from '../store/combineReducers';
+import combineSelectors from '../store/combineSelectors';
+import combineStates from '../store/combineStates';
+import combineActions from '../store/combineActions';
 
-export const actions = {
-	options: options.actions,
-	assets: assets.options,
+const stores = {
+	options,
+	assets,
 };
 
-export const initialState = {
-	options: options.initialState,
-	assets: assets.initialState,
+export const actions = combineActions({}, stores);
+
+export const initialState = combineStates({}, stores);
+
+export const selectors = {
+	options: options.selectors,
+	assets: assets.selectors,
 };
 
-export const reducer = combineReducers({
-	options: options.reducer,
-	assets: assets.reducer,
-});
+export const reducer = combineReducers(stores);
 
 export default reducer;

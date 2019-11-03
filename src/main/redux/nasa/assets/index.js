@@ -1,4 +1,4 @@
-import { createAction, createReducer, createSelector } from 'redux-starter-kit';
+import { createAction, createReducer } from 'redux-starter-kit';
 import keyBy from 'lodash/keyBy';
 import hashCode from '~helpers/hashCode';
 
@@ -20,12 +20,14 @@ export const actions = {
 
 export const initialState = {
 	data: {},
+	items: [],
 	isFetching: false,
 };
 
 export const reducer = createReducer(initialState, {
 	[insertAssets]: (state, { payload }) => {
 		state.data = keyBy(payload, (item) => hashCode(item.href));
+		state.items = payload;
 	},
 	[clearAssets]: (state) => {
 		state.data = {};
@@ -39,8 +41,8 @@ export const reducer = createReducer(initialState, {
 });
 
 export const selectors = {
-	root: createSelector((state) => state.assets),
-	assets: createSelector((state) => Object.values(state.data)),
+	root: (state) => state.assets,
+	items: (state) => state.items,
 };
 
 const fetchAssets = (dispatch, excution) => (...args) => {

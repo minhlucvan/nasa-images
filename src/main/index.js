@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import config from '~config';
 import registerServiceWorker from '~helpers/registerServiceWorker';
 import AppContext from './context/AppContext';
-import createStore from './redux';
+import createModule from './redux';
 
 import './scss/global';
 
@@ -14,10 +14,10 @@ import packageJson from '../../package.json';
 
 console.log(`%c${packageJson.author.name} version: ${packageJson.version}`, 'background-color: #343E48; color: #90BC47; padding: 5px 10px');
 
-const store = createStore();
+const redux = createModule();
 
 const renderApp = () => (
-	<AppContext store={store} config={config}>
+	<AppContext redux={redux} config={config}>
 		<App />
 	</AppContext>
 );

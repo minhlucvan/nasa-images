@@ -1,0 +1,44 @@
+.SearchBar {
+	position: relative;
+	.SearchForm {
+		.SearchInput {
+			display: block;
+			width: 100%;
+			padding: .8rem;
+			padding-right: 4rem;
+			font-family: Nunito,sans-serif;
+			color: #38495b;
+			background-color: #fdfdfd;
+			border: 0;
+			border-radius: 3px;
+			outline: 0;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			appearance: none;
+			line-height: normal;
+			font-size: 1rem;
+			border: 2px solid #b6c2cc;
+			padding: 1rem;
+			padding-right: 4rem;
+			font-size: 1.125rem;
+		}
+		.SearchBtn {
+			position: absolute;
+			right: -4rem;
+			top: calc(50% - 16px);
+			display: inline-block;
+			width: 32px;
+			height: 32px;
+			background: none;
+			border: 0;
+			cursor: pointer;
+			outline: none;
+			-webkit-box-shadow: none;
+			box-shadow: none;
+		
+			svg {
+				fill: #b6c2cc;
+			}
+		}
+	}
+}
