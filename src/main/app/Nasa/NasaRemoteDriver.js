@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { usefetchAsset } from '~redux/nasa/assets';
 
-export const useRemoteDriver = ({ apiClient, withLoading }) => {
-	const a = 1;
+export const useRemoteDriver = ({ apiClient, withLoading, dispatch }) => {
+	const fetchAsset = usefetchAsset(dispatch, apiClient.nasa.search);
+	const search = withLoading(fetchAsset);
 	return {
-		search: withLoading(apiClient.nasa.search),
+		search,
 	};
 };
 

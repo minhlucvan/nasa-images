@@ -4,13 +4,11 @@ import thunk from 'redux-thunk';
 import { compose, createStore, applyMiddleware, combineReducers } from 'redux';
 import initialState from './initialState';
 
-const middlewares = [];
+const middlewares = [thunk];
 
 const createReducer = (modules) => combineReducers(reduce(modules, (r, v, k) => ({ [k]: v.reducer, ...r }), {}));
 
 const combinedStates = (defaultState, modules) => ({ ...defaultState, ...reduce(modules, (r, v, k) => ({ [k]: v.initialState, ...r }), {}) });
-
-middlewares.push(thunk);
 
 /*
 if (process.env.NODE_ENV === 'development') {

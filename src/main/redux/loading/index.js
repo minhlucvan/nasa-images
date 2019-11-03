@@ -28,7 +28,7 @@ export const reducer = createReducer(
 );
 
 
-export const withLoader = (task, dispatch) => (payload) => {
+export const withLoader = (dispatch, task) => (payload) => {
 	dispatch(actions.startLoad());
 	return task(payload)
 		.finally(() => {
@@ -37,7 +37,7 @@ export const withLoader = (task, dispatch) => (payload) => {
 };
 
 export const useLoading = ({ dispatch }) => {
-	const load = (task) => withLoader(task, dispatch);
+	const load = (...args) => withLoader(dispatch, ...args);
 	return [load];
 };
 

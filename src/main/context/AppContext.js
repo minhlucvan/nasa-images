@@ -23,6 +23,7 @@ export const AppContext = ({ store: storeInstance, config: appConfig, children }
 	}, [store, appConfig]);
 	const state = {
 		store,
+		dispatch: store.dispatch,
 		apiClient,
 		withLoading,
 	};

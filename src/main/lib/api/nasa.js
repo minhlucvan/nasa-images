@@ -11,6 +11,9 @@ export default ({ SCHEMA, HOST, SEARCH, token }) => {
 				q,
 			},
 			paramsSerializer: (params) => qs.stringify(params),
-		}),
+		}).then((response) => ({
+			data: response.data.collection.items,
+			meta: response.data.collection.metadata,
+		})),
 	};
 };

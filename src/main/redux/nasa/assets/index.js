@@ -1,4 +1,6 @@
 import { createAction, createReducer, createSelector } from 'redux-starter-kit';
+import keyBy from 'lodash/keyBy';
+import hashCode from '~helpers/hashCode';
 
 const PREFIX = '[NASA] [ASSETS]';
 
@@ -10,23 +12,10 @@ const clearAssets = createAction(`${PREFIX}/clearAssets`);
 
 const insertAssets = createAction(`${PREFIX}/insertAssets`);
 
-const fetchAssets = createAction(`${PREFIX}/fetchAssets`, (excution) => async (dispatch) => {
-	dispatch(startFetch());
-	return excution()
-		.then((result) => {
-			dispatch(clearAssets());
-			dispatch(insertAssets(result.assets));
-		})
-		.finally(() => {
-			stopFetch();
-		});
-});
-
 export const actions = {
 	startFetch,
 	stopFetch,
 	clearAssets,
-	fetchAssets,
 };
 
 export const initialState = {
@@ -35,11 +24,17 @@ export const initialState = {
 };
 
 export const reducer = createReducer(initialState, {
-	[insertAssets]: (state, { assets }) => {
-		state.data = assets;
+	[insertAssets]: (state, { payload }) => {
+		state.data = keyBy(payload, (item) => hashCode(item.href));
 	},
 	[clearAssets]: (state) => {
 		state.data = {};
+	},
+	[startFetch]: (state) => {
+		state.isFetching = true;
+	},
+	[stopFetch]: (state) => {
+		state.isFetching = false;
 	},
 });
 
@@ -47,5 +42,20 @@ export const selectors = {
 	root: createSelector((state) => state.assets),
 	assets: createSelector((state) => Object.values(state.data)),
 };
+
+const fetchAssets = (dispatch, excution) => (...args) => {
+	dispatch(startFetch());
+	return excution(...args)
+		.then((result) => {
+			dispatch(clearAssets());
+			dispatch(insertAssets(result.data));
+		})
+		.finally(() => {
+			dispatch(stopFetch());
+		});
+};
+
+
+export const usefetchAsset = (dispatch, excution) => fetchAssets(dispatch, excution);
 
 export default reducer;
