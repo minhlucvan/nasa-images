@@ -1,39 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useRouteMatch } from 'react-router-dom';
-
-import createLocalDriver from './NasaLocalDriver';
-import createRemoteDriver from './NasaRemoteDriver';
+import React, { useContext } from 'react';
+import useDriver from './NasaDriver';
 
 const Context = React.createContext();
 
 export const useNasaContext = () => useContext(Context);
 
 const NasaContext = ({ children }) => {
-	const { path } = useRouteMatch();
-	const [driver, setDriver] = useState();
+	const [driver] = useDriver();
 
-	const useLocalDriver = () => {
-		const driverInstance = createLocalDriver();
-		setDriver(driverInstance);
-	};
-
-	const useRemoteDriver = () => {
-		const driverInstance = createRemoteDriver();
-		setDriver(driverInstance);
-	};
-
-	useEffect(() => {
-		if (path && path.includes('explore')) {
-			useRemoteDriver();
-		}
-		if (path && path.includes('collection')) {
-			useLocalDriver();
-		}
-		return () => { };
-	}, [path]);
+	const handlerSearch = (term) => driver && driver.search(term);
 
 	const context = {
 		driver,
+		handlerSearch,
 	};
 
 	return (

@@ -1,8 +1,12 @@
-import createBaseDriver from './NasaDriver';
+import api from '~api';
+import { useAppContext } from '../../context/AppContext';
 
-export const createDriver = () => {
-	const driver = createBaseDriver();
-	return driver;
+export const useRemoteDriver = () => {
+	const { apiClient } = useAppContext(api.search);
+
+	return {
+		search: apiClient.nasa.search,
+	};
 };
 
-export default createDriver;
+export default useRemoteDriver;

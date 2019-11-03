@@ -1,4 +1,4 @@
-import { createReducer, createAction } from 'redux-starter-kit';
+import { createReducer, createAction, createSelector } from 'redux-starter-kit';
 
 const PREFIX = '[APP] [CONFIG]';
 
@@ -16,7 +16,7 @@ export const reducer = createReducer([], {
 });
 
 export const selectors = {
-	root: (state) => state.config,
+	root: createSelector((state) => state.config),
 };
 
 export default reducer;

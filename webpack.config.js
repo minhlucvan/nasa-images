@@ -169,6 +169,9 @@ module.exports = (env, options) => ({
 			'~config': path.resolve(__dirname, 'src/main/config'),
 			'~store': path.resolve(__dirname, 'src/main/redux/store'),
 			'~helpers': path.resolve(__dirname, 'src/main/lib/helpers'),
+			'~api': path.resolve(__dirname, 'src/main/lib/api'),
+			'~redux': path.resolve(__dirname, 'src/main/redux'),
+			'~hooks': path.resolve(__dirname, 'src/main/lib/hooks'),
 		},
 	},
 	performance: {
@@ -213,7 +216,7 @@ module.exports = (env, options) => ({
 		],
 	},
 	plugins: [
-		new webpack.NormalModuleReplacementPlugin('/src/main/config/*.js', ((resource) => {
+		new webpack.NormalModuleReplacementPlugin(/\^src\/main\/(?!(?:.*\/)?config\/*$).*.js/, ((resource) => {
 			if (env === 'production') {
 				try {
 					const prodRes = resource.request.replace('.js', `.${env}.js`);

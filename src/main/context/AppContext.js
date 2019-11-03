@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
+import useApiClient from '~hooks/useApiClient';
 import StoreContext from './StoreContext';
 import I18nContext from './I18nContext';
 import ThemeContext from './ThemeContext';
@@ -11,6 +12,7 @@ export const useAppContext = () => useContext(Context);
 
 export const AppContext = ({ store: storeInstance, config: appConfig, children }) => {
 	const [store] = useState(storeInstance);
+	const [apiClient, refreshClient] = useApiClient(appConfig || {});
 	const [config, setConfig] = useState(null);
 
 	store.subscribe(() => {
@@ -19,11 +21,13 @@ export const AppContext = ({ store: storeInstance, config: appConfig, children }
 
 	useEffect(() => {
 		store.dispatch(fromConfig.actions.loadConfig(appConfig));
+		refreshClient(appConfig || {});
 	}, [store, appConfig]);
 
 	const state = {
 		store,
 		config,
+		apiClient,
 	};
 
 	return (
