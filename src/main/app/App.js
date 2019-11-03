@@ -18,7 +18,7 @@ import styles from './App.module';
 
 
 const App = () => {
-	const { config } = useAppContext();
+	const { config, searchTerm, updateSearchTerm } = useAppContext();
 	return (
 		<main className={styles.App}>
 			<ErrorBoundary>
@@ -29,7 +29,7 @@ const App = () => {
 								<Logo src={config.BRAND.logo} />
 							</HeaderSection>
 							<HeaderSection>
-								<SearchBar />
+								<SearchBar term={searchTerm} onSearch={updateSearchTerm}/>
 							</HeaderSection>
 							<HeaderSection>action</HeaderSection>
 						</Header>

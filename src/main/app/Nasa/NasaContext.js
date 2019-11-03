@@ -18,10 +18,6 @@ const NasaContext = ({ children }) => {
 	const [driver, setDriver] = useState(pathname);
 
 	const handlerSearch = (term) => driver && driver.search(term);
-	const context = {
-		driver,
-		handlerSearch,
-	};
 
 	const refresherDriver = (path) => {
 		if (path && path.includes('explore')) {
@@ -33,9 +29,18 @@ const NasaContext = ({ children }) => {
 	};
 
 	useEffect(() => {
+		handlerSearch(appContext.searchTerm);
+	}, [appContext.searchTerm]);
+
+	useEffect(() => {
 		refresherDriver(pathname);
 		return () => { };
 	}, [pathname]);
+
+	const context = {
+		driver,
+		handlerSearch,
+	};
 
 	return (
 		<Context.Provider value={context}>

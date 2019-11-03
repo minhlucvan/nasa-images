@@ -14,6 +14,7 @@ export const useAppContext = () => useContext(Context);
 
 export const AppContext = ({ redux, config, children }) => {
 	const [store] = useState(redux.store);
+	const [searchTerm, updateSearchTerm] = useState('');
 	const [selectors] = useState(redux.selectors);
 	const [withLoading] = fromLoading.useLoading({ dispatch: store.dispatch });
 	const [apiClient, refreshClient] = useApiClient(config || {});
@@ -30,6 +31,8 @@ export const AppContext = ({ redux, config, children }) => {
 		selectors,
 		apiClient,
 		withLoading,
+		updateSearchTerm,
+		searchTerm,
 	};
 
 	return (
