@@ -11,30 +11,14 @@ export const useAssetContext = () => useContext(Context);
 
 export const AssetContext = (props) => {
 	const { assetId } = useParams();
-	const { pathname } = useLocation();
 	const { selectors } = useAppContext();
 	const shouldLoadAssets = useSelector(selectors.nasa.assets.shouldLoadAssets);
 	const {
 		driver,
 		handleSelectAsset,
-		registerRemote,
-		registerLocal,
 		handlerSearch,
 		handlerdeselectAsset,
 	} = useNasaContext();
-
-
-	useEffect(() => {
-		if (driver) {
-			return;
-		}
-		if (pathname && pathname.includes('explore') && (!driver || (driver && !driver.isRemote))) {
-			registerRemote();
-		}
-		if (pathname && pathname.includes('collection') && (!driver || (driver && driver.isLocal))) {
-			registerLocal();
-		}
-	}, [driver, pathname]);
 
 	useEffect(() => {
 		if (driver && assetId) {

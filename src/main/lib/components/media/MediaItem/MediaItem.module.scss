@@ -8,7 +8,35 @@
     box-shadow: 0 2px 4px rgba(0,0,0,.1);
     text-decoration: none;
     transition-property: all;
-    transition-duration: 0.6s;
+	transition-duration: 0.6s;
+	&:hover {
+		box-shadow: 2px 4px 8px rgba(0,0,0,.1);
+	}
+	.ItemMain {
+		position: relative;
+		.ItemContent {
+
+		}
+		.ItemOverlay {
+			position: absolute;
+			opacity: 0;
+			top: 0;
+			left: 0;
+			background: rgba(0, 0, 0, 0);
+			opacity: 1;
+			width: 100%;
+			height: 100%;
+			transition: opacity  0.4s;
+			opacity: 0;
+			padding: 20px;
+		}
+
+		&:hover {
+			.ItemOverlay {
+				opacity: 1;
+			}
+		}
+	}
 
 	.ItemWraper {
 		display: block;
@@ -33,18 +61,34 @@
 			margin: 1rem;
 			background-color: rgb(177, 174, 174);
 			transition: all 0.4s;
+			img {
+				width: 100%;;
+			}
 		}
 	}
 	&.loading {
 		opacity: 0;
 		.ItemImageWraper {
-			min-height: 300px;
+			min-height: 200px;
 		}
 	}
 	&.loaded {
 		opacity: 1;
 		.ItemImageWraper {
 			min-height: 100px;
+		}
+	}
+
+	.Icon {
+		font-size: 3rem;
+		color: gray;
+		transition: all 0.2s;
+		&:hover {
+			transition: scale(1.1);
+			color: pink;
+		}
+		&.light {
+			color: rgb(255, 0, 106);
 		}
 	}
 }

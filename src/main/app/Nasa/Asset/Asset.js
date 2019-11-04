@@ -11,7 +11,7 @@ export const Asset = ({ asset }) => {
 				<div className={styles.Title}>
 					<h1>{caption}</h1>
 				</div>
-				<div class={styles.Content}>
+				<div className={styles.Content}>
 					<div className={styles.Media}>
 						<Img src={thumbnail}
 							alt={caption}

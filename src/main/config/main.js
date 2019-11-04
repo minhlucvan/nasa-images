@@ -1,5 +1,5 @@
-import APP from './app';
+import app from './app';
 
 export default {
-	APP,
+	app,
 };

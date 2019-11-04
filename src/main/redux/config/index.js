@@ -9,6 +9,10 @@ export const actions = {
 };
 
 export const initialState = {
+	app: {},
+	api: {},
+	nasa: {},
+	brand: {},
 };
 
 export const reducer = createReducer([], {
@@ -16,7 +20,8 @@ export const reducer = createReducer([], {
 });
 
 export const selectors = {
-	root: createSelector((state) => state.config),
+	state: (state) => state,
+	api: (state) => state.api,
 };
 
 export default reducer;

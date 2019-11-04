@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import useApiClient from '~hooks/useApiClient';
+import { useStorageClient } from '../lib/storage';
 import StoreContext from './StoreContext';
 import I18nContext from './I18nContext';
 import ThemeContext from './ThemeContext';
@@ -17,11 +16,10 @@ export const AppContext = ({ redux, config, children }) => {
 	const [searchTerm, updateSearchTerm] = useState('');
 	const [selectors] = useState(redux.selectors);
 	const [withLoading] = fromLoading.useLoading({ dispatch: store.dispatch });
-	const [apiClient, refreshClient] = useApiClient(config || {});
+	const storageClient = useStorageClient();
 
 	useEffect(() => {
 		store.dispatch(fromConfig.actions.loadConfig(config));
-		refreshClient(config || {});
 	}, [store, config]);
 
 	const state = {
@@ -29,7 +27,7 @@ export const AppContext = ({ redux, config, children }) => {
 		store,
 		config,
 		selectors,
-		apiClient,
+		storageClient,
 		withLoading,
 		updateSearchTerm,
 		searchTerm,

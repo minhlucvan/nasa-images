@@ -5,10 +5,20 @@ import combineSelectors from './store/combineSelectors';
 import * as nasa from './nasa';
 import * as config from './config';
 import * as loading from './loading';
+import * as api from './api';
 
-const stores = { nasa, config, loading };
+const stores = { nasa, config, loading, api };
 
-export default () => ({
-	store: configureStore(stores),
-	selectors: combineSelectors({}, stores),
-});
+let redux = null;
+
+export const getRedux = () => redux;
+
+export default () => {
+	const newRedux = {
+		store: configureStore(stores),
+		selectors: combineSelectors({}, stores),
+	};
+	newRedux.store.slector = newRedux.selectors;
+	redux = newRedux;
+	return redux;
+};

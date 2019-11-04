@@ -1,11 +1,11 @@
-import MAIN from './main';
-import API from './api';
-import NASA from './nasa';
-import BRAND from './brand';
+import main from './main';
+import api from './api';
+import nasa from './nasa';
+import brand from './brand';
 
 export default {
-	MAIN,
-	API,
-	NASA,
-	BRAND,
+	main,
+	api,
+	nasa,
+	brand,
 };

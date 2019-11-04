@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-
+import { useDispatch } from 'react-redux';
 import useLocalDriver from './NasaLocalDriver';
 import useRemoteDriver from './NasaRemoteDriver';
 import { useAppContext } from '../../context/AppContext';
+import { useSelectAsset, useDeselectAsset, actions } from '~redux/nasa/assets';
 
 const Context = React.createContext();
 
@@ -10,28 +11,40 @@ export const useNasaContext = () => useContext(Context);
 
 const NasaContext = ({ children }) => {
 	const appContext = useAppContext();
-	const [driver, setDriver] = useState(null);
+	const dispatch = useDispatch();
+	const localDriver = useLocalDriver(appContext);
+	const remoteDriver = useRemoteDriver(appContext);
+	const selectAsset = useSelectAsset(appContext.dispatch);
+	const deselectAsset = useDeselectAsset(appContext.dispatch);
 
-	const handlerSearch = (params) => driver && driver.search && driver.search(params);
+	const testSearch = (...args) => dispatch(actions.searchAsset(...args));
 
-	const handleSelectAsset = (assetId) => driver && driver.selectAsset && driver.selectAsset(assetId);
+	const handlerSearch = (params) => remoteDriver.search(params);
 
-	const registerRemote = () => setDriver(useRemoteDriver(appContext));
+	const handleSelectAsset = (assetId) => selectAsset(assetId);
 
-	const registerLocal = () => setDriver(useLocalDriver(appContext));
+	const handlerdeselectAsset = () => deselectAsset();
+
+	const saveAsset = (item) => localDriver.saveAsset(item);
+
+	const removeAsset = (item) => localDriver.removeAsset(item.id);
+
+	const likeAsset = (item) => localDriver.likeAsset(item);
 
 	useEffect(() => {
 		if (appContext.searchTerm) {
-			handlerSearch({ q: appContext.searchTerm });
+			// handlerSearch({ q: appContext.searchTerm });
+			testSearch({ q: appContext.searchTerm });
 		}
 	}, [appContext.searchTerm]);
 
 	const context = {
-		driver,
 		handlerSearch,
 		handleSelectAsset,
-		registerRemote,
-		registerLocal,
+		handlerdeselectAsset,
+		saveAsset,
+		removeAsset,
+		likeAsset,
 	};
 
 	return (

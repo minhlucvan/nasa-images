@@ -6,20 +6,20 @@ import combineReducers from '../store/combineReducers';
 import combineStates from '../store/combineStates';
 import combineActions from '../store/combineActions';
 
-const stores = {
+export const modules = {
 	options,
 	assets,
 };
 
-export const actions = combineActions({}, stores);
+export const actions = combineActions({}, modules);
 
-export const initialState = combineStates({}, stores);
+export const initialState = combineStates({}, modules);
 
 export const selectors = {
 	options: options.selectors,
 	assets: assets.selectors,
 };
 
-export const reducer = combineReducers(stores);
+export const reducer = combineReducers(modules);
 
 export default reducer;

@@ -1,13 +1,13 @@
 import axios from 'axios';
 import qs from 'qs';
 
-export default ({ SCHEMA, HOST, SEARCH, token }) => {
-	const BASE_URL = `${SCHEMA}://${HOST}`;
+export default ({ schema, host, search, token }) => {
+	const BASE_URL = `${schema}://${host}`;
 	return {
 		// eslint-disable-next-line camelcase
 		search: ({ q, nasa_id }) => axios({
 			method: 'get',
-			url: `${BASE_URL}/${SEARCH}`,
+			url: `${BASE_URL}/${search}`,
 			params: {
 				q,
 				nasa_id,

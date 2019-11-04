@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useRouteMatch, Link } from 'react-router-dom';
 import Img from 'react-image';
-
+import { TiHeartFullOutline, TiBookmark } from 'react-icons/ti';
 import styles from './MediaItem.module';
 
-export const MediaItem = ({ id, caption, thumbnail, onLoad }) => {
+export const MediaItem = ({ item, onLoad, onAdd, onLike, onRemove }) => {
+	const { id, caption, thumbnail, isSaved, isFavorited } = item;
 	const [imgLoaded, setImgLoaded] = useState(false);
 	const { path } = useRouteMatch();
 
@@ -13,19 +14,42 @@ export const MediaItem = ({ id, caption, thumbnail, onLoad }) => {
 		onLoad();
 	};
 
+	const handleAdd = (e) => {
+		e.preventDefault();
+		onAdd(item);
+	};
+
+	const handleLike = (e) => {
+		e.preventDefault();
+		onLike(item);
+	};
+
+	const handleRemove = (e) => {
+		e.preventDefault();
+		onRemove(item);
+	};
+
 	return (
 		<article className={`${styles.MediaItem} ${imgLoaded ? styles.loaded : styles.loading}`}>
 			<Link className={styles.ItemWraper}
 				title={caption}
 				to={`${path}/asset/${id}`}>
-				<div className={styles.ItemImageWraper}>
-					<Img src={thumbnail}
-						alt={caption}
-						title={caption}
-						className={`${styles.ItemImage}`}
-						onLoad={handleImageLoaded} />
+				<div className={styles.ItemMain}>
+					<div className={styles.ItemContent}>
+						<div className={styles.ItemImageWraper}>
+							<Img src={thumbnail}
+								alt={caption}
+								title={caption}
+								className={`${styles.ItemImage}`}
+								onLoad={handleImageLoaded} />
+						</div>
+						<p className={styles.ItemCaption}>{caption}</p>
+					</div>
+					<div className={styles.ItemOverlay}>
+						<TiHeartFullOutline className={`${styles.Icon} ${isFavorited ? styles.light : ''}`} onClick={handleLike} />
+						<TiBookmark className={`${styles.Icon} ${isSaved ? styles.light : ''}`} onClick={isSaved ? handleRemove : handleAdd} />}
+					</div>
 				</div>
-				<p className={styles.ItemCaption}>{caption}</p>
 			</Link>
 		</article>
 	);

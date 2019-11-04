@@ -1,5 +1,5 @@
-import ROUTES from './routes';
+import routes from './routes';
 
 export default {
-	ROUTES,
+	routes,
 };

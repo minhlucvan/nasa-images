@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 
 import AjaxLoading from '~components/AjaxLoading';
@@ -26,12 +27,14 @@ const App = () => {
 					<StackedSection>
 						<Header>
 							<HeaderSection>
-								<Logo src={config.BRAND.logo} />
+								<Logo src={config.brand.logo} />
 							</HeaderSection>
 							<HeaderSection>
 								<SearchBar term={searchTerm} onSearch={updateSearchTerm}/>
 							</HeaderSection>
-							<HeaderSection>action</HeaderSection>
+							<HeaderSection>
+								<Link to='/collection'> Collection</Link>
+							</HeaderSection>
 						</Header>
 					</StackedSection>
 					<StackedSection grow={true}>

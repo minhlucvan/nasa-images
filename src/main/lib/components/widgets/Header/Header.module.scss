@@ -1,6 +1,5 @@
 .Header {
-	width: 100%;
-    padding: 1rem 1rem;
+    padding: 1rem;
     -ms-flex-item-align: baseline;
     align-self: baseline;
     background-color: #fff;
@@ -9,6 +8,7 @@
 	box-shadow: 0 1px 4px rgba(0,0,0,.1);
 	.HeaderWraper {
 		max-width: 1400px;
+		margin: auto;
 		display: flex;
 		flex-direction: row;
 		align-items: center;

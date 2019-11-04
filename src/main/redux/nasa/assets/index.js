@@ -1,7 +1,7 @@
-import { createAction, createReducer } from 'redux-starter-kit';
 import keyBy from 'lodash/keyBy';
-import isEmpy from 'lodash/isEmpty';
+import { createAction, createReducer } from 'redux-starter-kit';
 
+import * as fromApi from '../../api';
 
 const PREFIX = '[NASA] [ASSETS]';
 
@@ -17,17 +17,27 @@ const selectAsset = createAction(`${PREFIX}/selectAsset`);
 
 const deselectAsset = createAction(`${PREFIX}/deselectAsset`);
 
+const saveAsset = createAction(`${PREFIX}/saveAsset`);
+
+const removeAsset = createAction(`${PREFIX}/removeAsset`);
+
+const likeAsset = createAction(`${PREFIX}/likeAsset`);
+
+const dislikeAsset = createAction(`${PREFIX}/dislikeAsset`);
+
+const searchAsset = createAction(`${PREFIX}/searchAsset`);
+
 export const actions = {
 	startFetch,
 	stopFetch,
 	clearAssets,
 	selectAsset,
 	deselectAsset,
+	searchAsset,
 };
 
 export const initialState = {
 	data: {},
-	items: [],
 	selectedId: null,
 	searchTerm: null,
 	fectched: false,
@@ -55,13 +65,44 @@ export const reducer = createReducer(initialState, {
 	[deselectAsset]: (state) => {
 		state.selectedId = null;
 	},
+	[saveAsset]: (state, { payload }) => {
+		const { id } = payload;
+		state.data[id].isSaved = true;
+	},
+	[removeAsset]: (state, { payload }) => {
+		state.data[payload].isSaved = false;
+	},
+	[likeAsset]: (state, { payload }) => {
+		state.data[payload].isFavorite = true;
+	},
+	[dislikeAsset]: (state, { payload }) => {
+		state.data[payload].isFavorite = false;
+	},
 });
 
 export const selectors = {
 	root: (state) => state.assets,
-	items: (state) => state.items,
+	items: (state) => Object.values(state.data),
 	selected: (state) => state.data[state.selectedId],
 	shouldLoadAssets: (state) => state.selectedId && !state.data[state.selectedId] && !state.isFetching && !state.fectched,
+};
+
+const searchAssetEffect = async ({ dispatch }, action) => {
+	try {
+		dispatch(startFetch());
+		const res = await dispatch(fromApi.actions.searchAssetApi(action.payload));
+		dispatch(insertAssets(res.data));
+		return res;
+	} catch (e) {
+		// TODO
+	} finally {
+		dispatch(stopFetch());
+	}
+	return null;
+};
+
+export const effects = {
+	[searchAsset]: searchAssetEffect,
 };
 
 const fetchAssets = (dispatch, excution) => (...args) => {
@@ -78,6 +119,12 @@ const fetchAssets = (dispatch, excution) => (...args) => {
 
 export const useSelectAsset = (dispatch) => (assetId) => dispatch(selectAsset(assetId));
 
+export const useDeselectAsset = (dispatch) => () => dispatch(deselectAsset());
+
 export const usefetchAsset = (dispatch, excution) => fetchAssets(dispatch, excution);
+
+export const useSaveAsset = (dispatch, excution) => (...args) => excution(...args).then((item) => dispatch(saveAsset(item)));
+
+export const useRemoveAsset = (dispatch, excution) => (...args) => excution(...args).then((item) => dispatch(removeAsset(item)));
 
 export default reducer;
