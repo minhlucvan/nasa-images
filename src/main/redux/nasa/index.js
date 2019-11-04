@@ -1,7 +1,8 @@
 import * as options from './options';
 import * as assets from './assets';
+import * as asset from './asset';
+
 import combineReducers from '../store/combineReducers';
-import combineSelectors from '../store/combineSelectors';
 import combineStates from '../store/combineStates';
 import combineActions from '../store/combineActions';
 

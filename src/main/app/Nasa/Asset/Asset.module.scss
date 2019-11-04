@@ -1,0 +1,41 @@
+.Asset {
+
+	.Wrapper {
+		max-width: 1024px;
+		margin: auto;
+
+		.Title {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-around;
+			padding: 0 20px;
+		}
+		.Content {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-around;
+			.Media{
+				padding: 20px;	
+				padding-top: 35px;	
+				width: 55%;
+				img {
+					width: 100%;
+				}
+			}
+			.Info {
+				width: 45%;
+				padding: 20px;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+				.Meta {
+					text-align: right;
+					.MetaInfo {
+						.MetaAttribute {
+						}
+					}
+				}
+			}
+		}
+	}
+}

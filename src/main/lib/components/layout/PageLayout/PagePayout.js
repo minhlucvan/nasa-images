@@ -3,9 +3,9 @@ import React from 'react';
 import styles from './PageLayout.module';
 
 export const PageLayout = ({ children }) => (
-	<section className={styles.PageLayout}>
+	<div className={styles.PageLayout}>
 		{children}
-	</section>
+	</div>
 );
 
 export default PageLayout;

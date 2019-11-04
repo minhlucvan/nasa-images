@@ -20,7 +20,8 @@ class ErrorBoundary extends Component {
 
 	render = () => {
 		if (this.state.errorInfo) {
-			return <div><pre>{this.state.error.stackTrace}</pre></div>;
+			console.error(this.state.error);
+			return <h1>Opps!</h1>;
 		}
 
 		/* No issues so just render the children */

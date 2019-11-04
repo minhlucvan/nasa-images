@@ -34,7 +34,7 @@ const App = () => {
 							<HeaderSection>action</HeaderSection>
 						</Header>
 					</StackedSection>
-					<StackedSection>
+					<StackedSection grow={true}>
 						<AppRoutes />
 					</StackedSection>
 					<StackedSection>

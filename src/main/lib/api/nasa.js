@@ -4,11 +4,13 @@ import qs from 'qs';
 export default ({ SCHEMA, HOST, SEARCH, token }) => {
 	const BASE_URL = `${SCHEMA}://${HOST}`;
 	return {
-		search: (q) => axios({
+		// eslint-disable-next-line camelcase
+		search: ({ q, nasa_id }) => axios({
 			method: 'get',
 			url: `${BASE_URL}/${SEARCH}`,
 			params: {
 				q,
+				nasa_id,
 			},
 			paramsSerializer: (params) => qs.stringify(params),
 		}).then((response) => ({
@@ -18,10 +20,13 @@ export default ({ SCHEMA, HOST, SEARCH, token }) => {
 				.map((item) => {
 					const info = item.data ? item.data[0] : {};
 					const link = item.links ? item.links[0] : {};
+					item.id = info.nasa_id;
 					item.info = info;
 					item.link = link;
 					item.caption = info.title || '';
+					item.description = info.description || '';
 					item.thumbnail = link.href || '';
+					item.displayDate = new Date(info.date_created).toLocaleDateString();
 					return item;
 				}),
 		})),

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useRouteMatch, Link } from 'react-router-dom';
 import Img from 'react-image';
 
 import styles from './MediaItem.module';
 
-export const MediaItem = ({ caption, thumbnail, onLoad }) => {
+export const MediaItem = ({ id, caption, thumbnail, onLoad }) => {
 	const [imgLoaded, setImgLoaded] = useState(false);
+	const { path } = useRouteMatch();
 
 	const handleImageLoaded = () => {
 		setImgLoaded(true);
@@ -13,9 +15,9 @@ export const MediaItem = ({ caption, thumbnail, onLoad }) => {
 
 	return (
 		<article className={`${styles.MediaItem} ${imgLoaded ? styles.loaded : styles.loading}`}>
-			<a className={styles.ItemWraper}
+			<Link className={styles.ItemWraper}
 				title={caption}
-				href="/asset/PIA21931">
+				to={`${path}/asset/${id}`}>
 				<div className={styles.ItemImageWraper}>
 					<Img src={thumbnail}
 						alt={caption}
@@ -24,7 +26,7 @@ export const MediaItem = ({ caption, thumbnail, onLoad }) => {
 						onLoad={handleImageLoaded} />
 				</div>
 				<p className={styles.ItemCaption}>{caption}</p>
-			</a>
+			</Link>
 		</article>
 	);
 };
