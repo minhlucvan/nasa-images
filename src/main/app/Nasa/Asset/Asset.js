@@ -1,13 +1,19 @@
 import React, { Fragment } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import Img from 'react-image';
 
 import styles from './Asset.module';
 
 export const Asset = ({ asset }) => {
 	const { thumbnail, caption, description, displayDate, info } = asset;
+	const history = useHistory();
+
 	return (
 		<div className={styles.Asset}>
 			<div className={styles.Wrapper}>
+				<div className={styles.Bread}>
+					<Link onClick={() => history.goBack()}>Back to the list</Link>
+				</div>
 				<div className={styles.Title}>
 					<h1>{caption}</h1>
 				</div>

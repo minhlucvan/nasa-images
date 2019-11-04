@@ -1,50 +1,38 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import useLocalDriver from './NasaLocalDriver';
-import useRemoteDriver from './NasaRemoteDriver';
+import React, { useContext, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useAppContext } from '../../context/AppContext';
-import { useSelectAsset, useDeselectAsset, actions } from '~redux/nasa/assets';
+import * as fromAssets from '~redux/nasa/assets';
+
 
 const Context = React.createContext();
 
 export const useNasaContext = () => useContext(Context);
 
 const NasaContext = ({ children }) => {
-	const appContext = useAppContext();
+	const { searchTerm, updateSearchTerm, setIsRemote, isRemote } = useAppContext();
 	const dispatch = useDispatch();
-	const localDriver = useLocalDriver(appContext);
-	const remoteDriver = useRemoteDriver(appContext);
-	const selectAsset = useSelectAsset(appContext.dispatch);
-	const deselectAsset = useDeselectAsset(appContext.dispatch);
-
-	const testSearch = (...args) => dispatch(actions.searchAsset(...args));
-
-	const handlerSearch = (params) => remoteDriver.search(params);
-
-	const handleSelectAsset = (assetId) => selectAsset(assetId);
-
-	const handlerdeselectAsset = () => deselectAsset();
-
-	const saveAsset = (item) => localDriver.saveAsset(item);
-
-	const removeAsset = (item) => localDriver.removeAsset(item.id);
-
-	const likeAsset = (item) => localDriver.likeAsset(item);
+	const nasaTerm = useSelector(fromAssets.selectors.searchTerm);
+	const isRemoteEnabled = useSelector(fromAssets.selectors.isRemoteEnabled);
 
 	useEffect(() => {
-		if (appContext.searchTerm) {
-			// handlerSearch({ q: appContext.searchTerm });
-			testSearch({ q: appContext.searchTerm });
+		if (searchTerm) {
+			dispatch(fromAssets.actions.updateSearchTerm(searchTerm));
 		}
-	}, [appContext.searchTerm]);
+	}, [searchTerm]);
+
+	useEffect(() => {
+		if (nasaTerm !== searchTerm) {
+			updateSearchTerm(nasaTerm);
+		}
+	}, [nasaTerm, searchTerm]);
+
+	useEffect(() => {
+		if (isRemoteEnabled !== isRemote) {
+			setIsRemote(isRemoteEnabled);
+		}
+	}, [isRemoteEnabled, isRemote]);
 
 	const context = {
-		handlerSearch,
-		handleSelectAsset,
-		handlerdeselectAsset,
-		saveAsset,
-		removeAsset,
-		likeAsset,
 	};
 
 	return (

@@ -1,9 +1,7 @@
 import React, { useContext, useEffect } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { useNasaContext } from '../NasaContext';
-import { useAppContext } from '../../../context/AppContext';
-
+import { useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import * as fromNasa from '~redux/nasa/assets';
 
 const Context = React.createContext();
 
@@ -11,31 +9,18 @@ export const useAssetContext = () => useContext(Context);
 
 export const AssetContext = (props) => {
 	const { assetId } = useParams();
-	const { selectors } = useAppContext();
-	const shouldLoadAssets = useSelector(selectors.nasa.assets.shouldLoadAssets);
-	const {
-		driver,
-		handleSelectAsset,
-		handlerSearch,
-		handlerdeselectAsset,
-	} = useNasaContext();
+	const dispatch = useDispatch();
 
 	useEffect(() => {
-		if (driver && assetId) {
-			handleSelectAsset(assetId);
-		}
+		dispatch(fromNasa.actions.selectAsset(assetId));
 		return () => {
-			handlerdeselectAsset();
+			dispatch(fromNasa.actions.deselectAsset(assetId));
 		};
-	}, [driver, assetId]);
+	}, [assetId]);
 
-	useEffect(() => {
-		if (driver && shouldLoadAssets && assetId) {
-			handlerSearch({ nasa_id: assetId });
-		}
-	}, [driver, shouldLoadAssets, assetId]);
-
-	const context = {};
+	const context = {
+		assetId,
+	};
 	return (
 		<Context.Provider value={context} >
 			{props.children}

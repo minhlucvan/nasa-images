@@ -14,13 +14,12 @@ export const useAppContext = () => useContext(Context);
 export const AppContext = ({ redux, config, children }) => {
 	const [store] = useState(redux.store);
 	const [searchTerm, updateSearchTerm] = useState('');
+	const [isRemote, setIsRemote] = useState(true);
 	const [selectors] = useState(redux.selectors);
 	const [withLoading] = fromLoading.useLoading({ dispatch: store.dispatch });
 	const storageClient = useStorageClient();
 
-	useEffect(() => {
-		store.dispatch(fromConfig.actions.loadConfig(config));
-	}, [store, config]);
+	store.dispatch(fromConfig.actions.loadConfig(config));
 
 	const state = {
 		dispatch: store.dispatch,
@@ -31,6 +30,8 @@ export const AppContext = ({ redux, config, children }) => {
 		withLoading,
 		updateSearchTerm,
 		searchTerm,
+		isRemote,
+		setIsRemote,
 	};
 
 	return (

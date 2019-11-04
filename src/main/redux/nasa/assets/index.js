@@ -1,39 +1,27 @@
+import reduce from 'lodash/reduce';
 import keyBy from 'lodash/keyBy';
+import get from 'lodash/get';
 import { createAction, createReducer } from 'redux-starter-kit';
 
 import * as fromApi from '../../api';
 
 const PREFIX = '[NASA] [ASSETS]';
 
-const startFetch = createAction(`${PREFIX}/startFetch`);
-
-const stopFetch = createAction(`${PREFIX}/stopFetch`);
-
-const clearAssets = createAction(`${PREFIX}/clearAssets`);
-
-const insertAssets = createAction(`${PREFIX}/insertAssets`);
-
-const selectAsset = createAction(`${PREFIX}/selectAsset`);
-
-const deselectAsset = createAction(`${PREFIX}/deselectAsset`);
-
-const saveAsset = createAction(`${PREFIX}/saveAsset`);
-
-const removeAsset = createAction(`${PREFIX}/removeAsset`);
-
-const likeAsset = createAction(`${PREFIX}/likeAsset`);
-
-const dislikeAsset = createAction(`${PREFIX}/dislikeAsset`);
-
-const searchAsset = createAction(`${PREFIX}/searchAsset`);
-
 export const actions = {
-	startFetch,
-	stopFetch,
-	clearAssets,
-	selectAsset,
-	deselectAsset,
-	searchAsset,
+	startFetch: createAction(`${PREFIX}/startFetch`),
+	stopFetch: createAction(`${PREFIX}/stopFetch`),
+	clearAssets: createAction(`${PREFIX}/clearAssets`),
+	clearTempAssets: createAction(`${PREFIX}/clearTempAssets`),
+	insertAssets: createAction(`${PREFIX}/insertAssets`),
+	selectAsset: createAction(`${PREFIX}/selectAsset`),
+	deselectAsset: createAction(`${PREFIX}/deselectAsset`),
+	saveAsset: createAction(`${PREFIX}/saveAsset`),
+	removeAsset: createAction(`${PREFIX}/removeAsset`),
+	likeAsset: createAction(`${PREFIX}/likeAsset`),
+	dislikeAsset: createAction(`${PREFIX}/dislikeAsset`),
+	searchAsset: createAction(`${PREFIX}/searchAsset`),
+	updateSearchTerm: createAction(`${PREFIX}/updateSearchTerm`),
+	setRemote: createAction(`${PREFIX}/setRemote`),
 };
 
 export const initialState = {
@@ -42,89 +30,114 @@ export const initialState = {
 	searchTerm: null,
 	fectched: false,
 	isFetching: false,
+	remoteEnabled: false,
 };
 
 export const reducer = createReducer(initialState, {
-	[insertAssets]: (state, { payload }) => {
+	[actions.insertAssets]: (state, { payload }) => {
 		state.data = keyBy(payload, 'id');
 		state.items = payload;
 	},
-	[clearAssets]: (state) => {
+	[actions.clearAssets]: (state) => {
 		state.data = {};
 	},
-	[startFetch]: (state) => {
+	[actions.startFetch]: (state) => {
 		state.isFetching = true;
 	},
-	[stopFetch]: (state) => {
+	[actions.stopFetch]: (state) => {
 		state.isFetching = false;
 		state.fectched = true;
 	},
-	[selectAsset]: (state, { payload }) => {
+	[actions.selectAsset]: (state, { payload }) => {
 		state.selectedId = payload;
 	},
-	[deselectAsset]: (state) => {
+	[actions.deselectAsset]: (state) => {
 		state.selectedId = null;
 	},
-	[saveAsset]: (state, { payload }) => {
+	[actions.saveAsset]: (state, { payload }) => {
 		const { id } = payload;
 		state.data[id].isSaved = true;
 	},
-	[removeAsset]: (state, { payload }) => {
-		state.data[payload].isSaved = false;
+	[actions.removeAsset]: (state, { payload }) => {
+		const { id } = payload;
+		state.data[id].isSaved = false;
+		state.data[id].isFavorited = false;
 	},
-	[likeAsset]: (state, { payload }) => {
-		state.data[payload].isFavorite = true;
+	[actions.likeAsset]: (state, { payload }) => {
+		const { id } = payload;
+		state.data[id].isFavorited = true;
+		state.data[id].isSaved = true;
 	},
-	[dislikeAsset]: (state, { payload }) => {
-		state.data[payload].isFavorite = false;
+	[actions.dislikeAsset]: (state, { payload }) => {
+		const { id } = payload;
+		state.data[id].isFavorited = false;
+	},
+	[actions.clearTempAssets]: (state) => {
+		const items = Object.values(state.data).filter((item) => item.isSaved);
+		const data = keyBy(items, 'id');
+		state.data = data;
+	},
+	[actions.setRemote]: (state, { payload }) => {
+		state.remoteEnabled = payload;
+	},
+	[actions.updateSearchTerm]: (state, { payload }) => {
+		state.searchTerm = payload;
 	},
 });
 
 export const selectors = {
 	root: (state) => state.assets,
-	items: (state) => Object.values(state.data),
 	selected: (state) => state.data[state.selectedId],
-	shouldLoadAssets: (state) => state.selectedId && !state.data[state.selectedId] && !state.isFetching && !state.fectched,
+	searchTerm: (state) => state.searchTerm,
+	isFetching: (state) => state.isFetching,
+	hasItem: (id) => (state) => !!state.data[id],
+	isRemoteEnabled: (state) => state.remoteEnabled,
+	items: (state) => Object.values(state.data)
+		.filter((it) => {
+			const remoteFilter = state.remoteEnabled || !it.isSaved;
+			return remoteFilter;
+		}),
 };
 
 const searchAssetEffect = async ({ dispatch }, action) => {
 	try {
-		dispatch(startFetch());
+		dispatch(actions.startFetch());
 		const res = await dispatch(fromApi.actions.searchAssetApi(action.payload));
-		dispatch(insertAssets(res.data));
+		dispatch(actions.clearTempAssets());
+		dispatch(actions.insertAssets(res.data));
 		return res;
 	} catch (e) {
-		// TODO
+		console.error(e);
 	} finally {
-		dispatch(stopFetch());
+		dispatch(actions.stopFetch());
 	}
-	return null;
+	return action;
+};
+
+const selectAssetEffect = ({ dispatch, getState }, action, next) => {
+	const state = getState();
+	const localState = get(state, 'nasa.assets');
+	const hasItemSelector = selectors.hasItem(action.payload);
+	if (!hasItemSelector(localState)) {
+		dispatch(actions.searchAsset({ nasa_id: action.payload }));
+	}
+	next(action);
+	return action;
+};
+
+const updateSearchTermEffect = ({ dispatch, getState }, action, next) => {
+	const state = getState();
+	const localState = get(state, 'nasa.assets');
+	if (action.payload && selectors.isRemoteEnabled(localState)) {
+		dispatch(actions.searchAsset({ q: action.payload }));
+	}
+	next(action);
 };
 
 export const effects = {
-	[searchAsset]: searchAssetEffect,
+	[actions.searchAsset]: searchAssetEffect,
+	[actions.selectAsset]: selectAssetEffect,
+	[actions.updateSearchTerm]: updateSearchTermEffect,
 };
-
-const fetchAssets = (dispatch, excution) => (...args) => {
-	dispatch(startFetch());
-	return excution(...args)
-		.then((result) => {
-			dispatch(clearAssets());
-			dispatch(insertAssets(result.data));
-		})
-		.finally(() => {
-			dispatch(stopFetch());
-		});
-};
-
-export const useSelectAsset = (dispatch) => (assetId) => dispatch(selectAsset(assetId));
-
-export const useDeselectAsset = (dispatch) => () => dispatch(deselectAsset());
-
-export const usefetchAsset = (dispatch, excution) => fetchAssets(dispatch, excution);
-
-export const useSaveAsset = (dispatch, excution) => (...args) => excution(...args).then((item) => dispatch(saveAsset(item)));
-
-export const useRemoveAsset = (dispatch, excution) => (...args) => excution(...args).then((item) => dispatch(removeAsset(item)));
 
 export default reducer;

@@ -4,7 +4,7 @@ import Img from 'react-image';
 import { TiHeartFullOutline, TiBookmark } from 'react-icons/ti';
 import styles from './MediaItem.module';
 
-export const MediaItem = ({ item, onLoad, onAdd, onLike, onRemove }) => {
+export const MediaItem = ({ item, onLoad, onAdd, onLike, onRemove, onDislike }) => {
 	const { id, caption, thumbnail, isSaved, isFavorited } = item;
 	const [imgLoaded, setImgLoaded] = useState(false);
 	const { path } = useRouteMatch();
@@ -22,6 +22,11 @@ export const MediaItem = ({ item, onLoad, onAdd, onLike, onRemove }) => {
 	const handleLike = (e) => {
 		e.preventDefault();
 		onLike(item);
+	};
+
+	const handleDislike = (e) => {
+		e.preventDefault();
+		onDislike(item);
 	};
 
 	const handleRemove = (e) => {
@@ -46,7 +51,7 @@ export const MediaItem = ({ item, onLoad, onAdd, onLike, onRemove }) => {
 						<p className={styles.ItemCaption}>{caption}</p>
 					</div>
 					<div className={styles.ItemOverlay}>
-						<TiHeartFullOutline className={`${styles.Icon} ${isFavorited ? styles.light : ''}`} onClick={handleLike} />
+						<TiHeartFullOutline className={`${styles.Icon} ${isFavorited ? styles.light : ''}`} onClick={isFavorited ? handleDislike : handleLike} />
 						<TiBookmark className={`${styles.Icon} ${isSaved ? styles.light : ''}`} onClick={isSaved ? handleRemove : handleAdd} />}
 					</div>
 				</div>

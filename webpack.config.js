@@ -72,8 +72,27 @@ module.exports = (env, options) => ({
 				],
 			},
 			{
+				test: /\.module\.s(a|c)ss$/,
+				loader: [
+					env === 'development' ? 'style-loader' : MiniCssExtractPlugin.loader,
+					{
+						loader: 'css-loader',
+						options: {
+							modules: true,
+							sourceMap: env === 'development',
+						},
+					},
+					{
+						loader: 'sass-loader',
+						options: {
+							sourceMap: env === 'development',
+						},
+					},
+				],
+			},
+			{
 				test: /\.(scss)$/,
-				exclude: /node_modules|bower_components/,
+				exclude: /\.module.(s(a|c)ss)$|node_modules|bower_components/,
 				use: [
 					{
 						/* Basically does what it says on the tin - watches for style changes! */

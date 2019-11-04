@@ -1,4 +1,4 @@
-import reduce from 'lodash/reduce';
+import persistState from 'redux-localstorage';
 import thunk from 'redux-thunk';
 /* import { logger } from 'redux-logger'; */
 import { compose, createStore, applyMiddleware } from 'redux';
@@ -19,6 +19,10 @@ const configureStore = (modules) => createStore(
 	combineStates(initialState, modules),
 	composeEnhancers(
 		applyMiddleware(...middlewares, ...combineEffects(modules)),
+		persistState('*', {
+			key: 'nasa',
+			slicer: () => (state) => state,
+		}),
 	),
 );
 

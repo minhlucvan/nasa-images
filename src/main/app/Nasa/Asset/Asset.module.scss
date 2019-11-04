@@ -3,7 +3,9 @@
 	.Wrapper {
 		max-width: 1024px;
 		margin: auto;
-
+		.Bread {
+			padding: 1rem;
+		}
 		.Title {
 			display: flex;
 			flex-direction: column;

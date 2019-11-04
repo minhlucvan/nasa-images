@@ -3,7 +3,7 @@ import MediaItem from '../MediaItem/MediaItem';
 
 import styles from './MediaList.module';
 
-export const MediaList = ({ items, onAddItem, onRemoveItem, onLikeItem }) => {
+export const MediaList = ({ items, onAddItem, onRemoveItem, onLikeItem, onDislikeItem }) => {
 	const [loadded, setLoaded] = useState(false);
 	const [loaddedItem, setLoaddedItem] = useState(0);
 
@@ -34,6 +34,7 @@ export const MediaList = ({ items, onAddItem, onRemoveItem, onLikeItem }) => {
 							onLoad={handleItemLoaded}
 							onAdd={onAddItem}
 							onLike={onLikeItem}
+							onDislike={onDislikeItem}
 							onRemove={onRemoveItem}/>
 					</div>
 				),

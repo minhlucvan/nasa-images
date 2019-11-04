@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
+import { TiWorld, TiFolderOpen } from 'react-icons/ti';
 
 import AjaxLoading from '~components/AjaxLoading';
 import ErrorBoundary from '~components/ErrorBoundary';
@@ -19,7 +19,7 @@ import styles from './App.module';
 
 
 const App = () => {
-	const { config, searchTerm, updateSearchTerm } = useAppContext();
+	const { config, searchTerm, updateSearchTerm, isRemote } = useAppContext();
 	return (
 		<main className={styles.App}>
 			<ErrorBoundary>
@@ -33,7 +33,12 @@ const App = () => {
 								<SearchBar term={searchTerm} onSearch={updateSearchTerm}/>
 							</HeaderSection>
 							<HeaderSection>
-								<Link to='/collection'> Collection</Link>
+								{!isRemote && <Link to='/explore' className={styles.PageLink}>
+									<TiWorld />
+								</Link>}
+								{isRemote && <Link to='/collection' className={styles.PageLink}>
+									<TiFolderOpen />
+								</Link>}
 							</HeaderSection>
 						</Header>
 					</StackedSection>
