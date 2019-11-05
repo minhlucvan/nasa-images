@@ -23,7 +23,7 @@ const NasaContext = ({ children }) => {
 			dispatch(fromAssets.actions.updateSearchTerm(searchTerm));
 
 			if (searchTerm) {
-				const target = isRemoteEnabled ? '/explore' : '/collection';
+				const target = pathname.includes('explore') ? '/explore' : '/collection';
 				history.push(target);
 			}
 		}
