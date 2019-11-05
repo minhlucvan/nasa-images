@@ -46,15 +46,17 @@ const App = () => {
 									onChange={updateSearchTerm} />
 							</HeaderSection>
 							<HeaderSection>
-								{!isRemote && <div className={styles.PageLink} onClick={toggleHeart}>
-									<TiHeartFullOutline className={isHeart ? styles.light : ''}/>
-								</div>}
-								{!isRemote && <Link to='/explore' className={styles.PageLink}>
-									<TiWorld />
-								</Link>}
-								{isRemote && <Link to='/collection' className={styles.PageLink}>
-									<TiFolderOpen />
-								</Link>}
+								<div className={styles.Actions}>
+									{!isRemote && <div className={styles.PageLink} onClick={toggleHeart}>
+										<TiHeartFullOutline className={`${isHeart ? styles.light : ''}`}/>
+									</div>}
+									{!isRemote && <Link to='/explore' className={styles.PageLink}>
+										<TiWorld />
+									</Link>}
+									{isRemote && <Link to='/collection' className={styles.PageLink}>
+										<TiFolderOpen />
+									</Link>}
+								</div>
 							</HeaderSection>
 						</Header>
 					</StackedSection>

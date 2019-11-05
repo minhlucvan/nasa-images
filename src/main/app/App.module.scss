@@ -12,6 +12,12 @@
     -ms-flex-line-pack: stretch;
     align-content: stretch;
 
+    .Actions {
+        min-width: 160px;
+        display: flex;
+        justify-content: flex-end;
+    }
+
     .PageLink {
         width: 77px;
         display: inline-block;
