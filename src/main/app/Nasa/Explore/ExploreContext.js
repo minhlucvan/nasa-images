@@ -13,6 +13,10 @@ export const ExploreContext = ({ children }) => {
 
 	dispatch(fromAssets.actions.setRemote(true));
 
+	useEffect(() => {
+		dispatch(fromAssets.actions.getRecentAsset());
+	}, []);
+
 	const context = {};
 	return (
 		<Context.Provider value={context} >

@@ -21,6 +21,7 @@ export const actions = {
 	likeAsset: createAction(`${PREFIX}/likeAsset`),
 	dislikeAsset: createAction(`${PREFIX}/dislikeAsset`),
 	searchAsset: createAction(`${PREFIX}/searchAsset`),
+	getRecentAsset: createAction(`${PREFIX}/getRecentAsset`),
 	updateSearchTerm: createAction(`${PREFIX}/updateSearchTerm`),
 	setRemote: createAction(`${PREFIX}/setRemote`),
 	setIsFavorited: createAction(`${PREFIX}/setIsFavorited`),
@@ -34,6 +35,7 @@ export const initialState = {
 	isFetching: false,
 	remoteEnabled: false,
 	isFavorited: false,
+	lastFetchRecent: null,
 };
 
 
@@ -41,6 +43,7 @@ export const selectors = {
 	root: (state) => state.assets,
 	selected: (state) => state.data[state.selectedId],
 	searchTerm: (state) => state.searchTerm,
+	shouldFetchRecent: (state) => !state.lastFetchRecent || (!state.searchTerm && (Date.now() - state.lastFetchRecent) * 0.001 > 5 * 60),
 	isFetching: (state) => state.isFetching,
 	hasItem: (id) => (state) => !!state.data[id],
 	isRemoteEnabled: (state) => state.remoteEnabled,
@@ -49,9 +52,10 @@ export const selectors = {
 		let items = Object.values(state.data)
 			.filter((it) => {
 				const remoteFilter = state.remoteEnabled && !!it.temp;
+				const recentFilter = !state.searchTerm && !!it.isRecent;
 				const localFilter = !state.remoteEnabled && !it.temp && it.isSaved;
 				const favoritedFilter = !state.isFavorited || it.isFavorited;
-				return remoteFilter || (localFilter && favoritedFilter);
+				return (remoteFilter && recentFilter) || (localFilter && favoritedFilter);
 			});
 		if (!state.remoteEnabled && state.searchTerm) {
 			const options = {
@@ -74,8 +78,9 @@ export const selectors = {
 
 export const reducer = createReducer(initialState, {
 	[actions.insertAssets]: (state, { payload }) => {
+		const { data: items, isRecent } = payload;
 		// eslint-disable-next-line no-restricted-syntax
-		for (const item of payload) {
+		for (const item of items) {
 			const oldItem = state.data[item.id];
 			let isSaved = false;
 			let isFavorited = false;
@@ -84,7 +89,7 @@ export const reducer = createReducer(initialState, {
 				isSaved = oldItem.isSaved;
 				isFavorited = oldItem.isFavorited;
 			}
-			state.data[item.id] = { ...item, isFavorited, isSaved, temp };
+			state.data[item.id] = { ...item, isFavorited, isSaved, temp, isRecent };
 		}
 	},
 	[actions.clearAssets]: (state) => {
@@ -153,7 +158,7 @@ const remoteSearch = async ({ dispatch }, action, next) => {
 		next(action);
 		const res = await dispatch(fromApi.actions.searchAssetApi(action.payload));
 		dispatch(actions.clearTempAssets());
-		dispatch(actions.insertAssets(res.data));
+		dispatch(actions.insertAssets(res));
 		return res;
 	} catch (e) {
 		console.error(e);
@@ -200,10 +205,24 @@ const updateSearchTermEffect = ({ dispatch, getState }, action, next) => {
 	next(action);
 };
 
+const getRecentAssetEffect = async ({ dispatch, getState }, action, next) => {
+	const state = getState();
+	const localState = get(state, 'nasa.assets');
+	if (selectors.shouldFetchRecent(localState)) {
+		dispatch(actions.startFetch());
+		const res = await dispatch(fromApi.actions.getRecentAssetApi());
+		dispatch(actions.insertAssets({ ...res, isRecent: true }));
+	}
+	next(action);
+	return action;
+};
+
+
 export const effects = {
 	[actions.searchAsset]: searchAssetEffect,
 	[actions.selectAsset]: selectAssetEffect,
 	[actions.updateSearchTerm]: updateSearchTermEffect,
+	[actions.getRecentAsset]: getRecentAssetEffect,
 };
 
 export default reducer;
