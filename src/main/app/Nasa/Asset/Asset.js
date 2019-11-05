@@ -12,7 +12,7 @@ export const Asset = ({ asset }) => {
 		<div className={styles.Asset}>
 			<div className={styles.Wrapper}>
 				<div className={styles.Bread}>
-					<Link onClick={() => history.goBack()}>Back to the list</Link>
+					<a onClick={() => history.goBack()}>Back to the list</a>
 				</div>
 				<div className={styles.Title}>
 					<h1>{caption}</h1>

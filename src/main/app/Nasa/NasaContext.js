@@ -19,13 +19,11 @@ const NasaContext = ({ children }) => {
 	const isRemoteEnabled = useSelector(fromAssets.selectors.isRemoteEnabled);
 
 	useEffect(() => {
-		if (searchTerm !== nasaTerm) {
-			dispatch(fromAssets.actions.updateSearchTerm(searchTerm));
+		dispatch(fromAssets.actions.updateSearchTerm(searchTerm));
 
-			if (searchTerm) {
-				const target = pathname.includes('explore') ? '/explore' : '/collection';
-				history.push(target);
-			}
+		if (searchTerm && !pathname.endsWith('explore') && !pathname.endsWith('collection')) {
+			const target = pathname.includes('explore') ? '/explore' : '/collection';
+			history.push(target);
 		}
 	}, [searchTerm]);
 

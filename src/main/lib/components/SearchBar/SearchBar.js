@@ -6,7 +6,9 @@ export const SearchBar = ({ term, onSearch, onChange }) => {
 	const [value, setValue] = useState(term);
 
 	useEffect(() => {
-		setValue(term);
+		if (term !== value) {
+			setValue(term);
+		}
 	}, [term]);
 
 	const handleSubmit = (e) => {

@@ -19,7 +19,7 @@ export const CollectionContext = ({ children }) => {
 	dispatch(fromAssets.actions.updateSearchTerm(''));
 
 	useEffect(() => {
-		updateSearchTerm('');
+		// updateSearchTerm('');
 	}, [pathname]);
 
 	useEffect(() => {

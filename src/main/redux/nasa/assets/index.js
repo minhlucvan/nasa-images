@@ -56,6 +56,12 @@ export const selectors = {
 		if (!state.remoteEnabled && state.searchTerm) {
 			const options = {
 				keys: ['caption', 'description'],
+				shouldSort: true,
+				threshold: 0.6,
+				location: 0,
+				distance: 100,
+				maxPatternLength: 32,
+				minMatchCharLength: 1,
 			};
 			const fuse = new Fuse(items, options);
 
