@@ -52,7 +52,7 @@ export const MediaItem = ({ item, onLoad, onAdd, onLike, onRemove, onDislike }) 
 					</div>
 					<div className={styles.ItemOverlay}>
 						<TiHeartFullOutline className={`${styles.Icon} ${isFavorited ? styles.light : ''}`} onClick={isFavorited ? handleDislike : handleLike} />
-						<TiBookmark className={`${styles.Icon} ${isSaved ? styles.light : ''}`} onClick={isSaved ? handleRemove : handleAdd} />}
+						<TiBookmark className={`${styles.Icon} ${isSaved ? styles.light : ''}`} onClick={isSaved ? handleRemove : handleAdd} />
 					</div>
 				</div>
 			</Link>
