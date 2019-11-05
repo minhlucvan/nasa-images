@@ -14,9 +14,11 @@ export const useAppContext = () => useContext(Context);
 export const AppContext = ({ redux, config, children }) => {
 	const [store] = useState(redux.store);
 	const [searchTerm, updateSearchTerm] = useState('');
-	const [isRemote, setIsRemote] = useState(true);
+	const pathname = window.location.href;
+	const [isRemote, setIsRemote] = useState(pathname.includes('explore'));
 	const [selectors] = useState(redux.selectors);
 	const [withLoading] = fromLoading.useLoading({ dispatch: store.dispatch });
+	const [isHeart, setIsHeart] = useState(false);
 	const storageClient = useStorageClient();
 
 	store.dispatch(fromConfig.actions.loadConfig(config));
@@ -32,6 +34,8 @@ export const AppContext = ({ redux, config, children }) => {
 		searchTerm,
 		isRemote,
 		setIsRemote,
+		isHeart,
+		setIsHeart,
 	};
 
 	return (

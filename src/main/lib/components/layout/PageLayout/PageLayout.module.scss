@@ -7,4 +7,11 @@
     padding: 0 1rem;
     padding-top: 1rem;
     padding-bottom: 1rem;
+    .Empty {
+        flex-grow: 1;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 }

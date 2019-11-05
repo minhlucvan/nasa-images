@@ -67,15 +67,14 @@
 		}
 	}
 	&.loading {
-		opacity: 0;
+		opacity: 0.5;
 		.ItemImageWraper {
-			min-height: 200px;
+			min-height: 20vw;
 		}
 	}
 	&.loaded {
 		opacity: 1;
 		.ItemImageWraper {
-			min-height: 100px;
 		}
 	}
 

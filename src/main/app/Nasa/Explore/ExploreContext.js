@@ -1,5 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { useLocation } from 'react-router-dom';
+import { useAppContext } from '../../../context/AppContext';
 import * as fromAssets from '~redux/nasa/assets';
 
 const Context = React.createContext();
@@ -10,7 +12,6 @@ export const ExploreContext = ({ children }) => {
 	const dispatch = useDispatch();
 
 	dispatch(fromAssets.actions.setRemote(true));
-	dispatch(fromAssets.actions.updateSearchTerm(''));
 
 	const context = {};
 	return (

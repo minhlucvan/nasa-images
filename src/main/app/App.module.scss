@@ -13,7 +13,15 @@
     align-content: stretch;
 
     .PageLink {
+        width: 77px;
+        display: inline-block;
+        margin-bottom: -8px;
         font-size: 3rem;
+        cursor: pointer;
         color: #122cad;
+
+        .light {
+            color: rgb(255, 0, 106);;
+        }
     }
 }

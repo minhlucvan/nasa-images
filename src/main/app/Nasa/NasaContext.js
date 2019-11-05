@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useAppContext } from '../../context/AppContext';
 import * as fromAssets from '~redux/nasa/assets';
 
@@ -9,22 +10,24 @@ const Context = React.createContext();
 export const useNasaContext = () => useContext(Context);
 
 const NasaContext = ({ children }) => {
-	const { searchTerm, updateSearchTerm, setIsRemote, isRemote } = useAppContext();
+	const { searchTerm, setIsRemote, isRemote } = useAppContext();
+	const { pathname } = useLocation();
+	const history = useHistory();
+
 	const dispatch = useDispatch();
 	const nasaTerm = useSelector(fromAssets.selectors.searchTerm);
 	const isRemoteEnabled = useSelector(fromAssets.selectors.isRemoteEnabled);
 
 	useEffect(() => {
-		if (searchTerm) {
+		if (searchTerm !== nasaTerm) {
 			dispatch(fromAssets.actions.updateSearchTerm(searchTerm));
+
+			if (searchTerm) {
+				const target = isRemoteEnabled ? '/explore' : '/collection';
+				history.push(target);
+			}
 		}
 	}, [searchTerm]);
-
-	useEffect(() => {
-		if (nasaTerm !== searchTerm) {
-			updateSearchTerm(nasaTerm);
-		}
-	}, [nasaTerm, searchTerm]);
 
 	useEffect(() => {
 		if (isRemoteEnabled !== isRemote) {

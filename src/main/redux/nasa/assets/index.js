@@ -1,6 +1,7 @@
 import reduce from 'lodash/reduce';
 import keyBy from 'lodash/keyBy';
 import get from 'lodash/get';
+import * as Fuse from 'fuse.js';
 import { createAction, createReducer } from 'redux-starter-kit';
 
 import * as fromApi from '../../api';
@@ -22,6 +23,7 @@ export const actions = {
 	searchAsset: createAction(`${PREFIX}/searchAsset`),
 	updateSearchTerm: createAction(`${PREFIX}/updateSearchTerm`),
 	setRemote: createAction(`${PREFIX}/setRemote`),
+	setIsFavorited: createAction(`${PREFIX}/setIsFavorited`),
 };
 
 export const initialState = {
@@ -31,12 +33,53 @@ export const initialState = {
 	fectched: false,
 	isFetching: false,
 	remoteEnabled: false,
+	isFavorited: false,
 };
+
+
+export const selectors = {
+	root: (state) => state.assets,
+	selected: (state) => state.data[state.selectedId],
+	searchTerm: (state) => state.searchTerm,
+	isFetching: (state) => state.isFetching,
+	hasItem: (id) => (state) => !!state.data[id],
+	isRemoteEnabled: (state) => state.remoteEnabled,
+	isFavorited: (state) => state.isFavorited,
+	items: (state) => {
+		let items = Object.values(state.data)
+			.filter((it) => {
+				const remoteFilter = state.remoteEnabled && !!it.temp;
+				const localFilter = !state.remoteEnabled && !it.temp && it.isSaved;
+				const favoritedFilter = !state.isFavorited || it.isFavorited;
+				return remoteFilter || (localFilter && favoritedFilter);
+			});
+		if (!state.remoteEnabled && state.searchTerm) {
+			const options = {
+				keys: ['caption', 'description'],
+			};
+			const fuse = new Fuse(items, options);
+
+			items = fuse.search(state.searchTerm);
+		}
+		return items;
+	},
+};
+
 
 export const reducer = createReducer(initialState, {
 	[actions.insertAssets]: (state, { payload }) => {
-		state.data = keyBy(payload, 'id');
-		state.items = payload;
+		// eslint-disable-next-line no-restricted-syntax
+		for (const item of payload) {
+			const oldItem = state.data[item.id];
+			let isSaved = false;
+			let isFavorited = false;
+			const temp = true;
+			if (oldItem) {
+				isSaved = oldItem.isSaved;
+				isFavorited = oldItem.isFavorited;
+			}
+			state.data[item.id] = { ...item, isFavorited, isSaved, temp };
+		}
 	},
 	[actions.clearAssets]: (state) => {
 		state.data = {};
@@ -73,8 +116,17 @@ export const reducer = createReducer(initialState, {
 		state.data[id].isFavorited = false;
 	},
 	[actions.clearTempAssets]: (state) => {
-		const items = Object.values(state.data).filter((item) => item.isSaved);
-		const data = keyBy(items, 'id');
+		const items = Object.values(state.data);
+		const data = {};
+		// eslint-disable-next-line no-restricted-syntax
+		for (const item of items) {
+			if (item.isSaved) {
+				if (item.temp) {
+					item.temp = false;
+				}
+				data[item.id] = item;
+			}
+		}
 		state.data = data;
 	},
 	[actions.setRemote]: (state, { payload }) => {
@@ -83,25 +135,16 @@ export const reducer = createReducer(initialState, {
 	[actions.updateSearchTerm]: (state, { payload }) => {
 		state.searchTerm = payload;
 	},
+	[actions.setIsFavorited]: (state, { payload }) => {
+		state.isFavorited = payload;
+	},
 });
 
-export const selectors = {
-	root: (state) => state.assets,
-	selected: (state) => state.data[state.selectedId],
-	searchTerm: (state) => state.searchTerm,
-	isFetching: (state) => state.isFetching,
-	hasItem: (id) => (state) => !!state.data[id],
-	isRemoteEnabled: (state) => state.remoteEnabled,
-	items: (state) => Object.values(state.data)
-		.filter((it) => {
-			const remoteFilter = state.remoteEnabled || !it.isSaved;
-			return remoteFilter;
-		}),
-};
 
-const searchAssetEffect = async ({ dispatch }, action) => {
+const remoteSearch = async ({ dispatch }, action, next) => {
 	try {
 		dispatch(actions.startFetch());
+		next(action);
 		const res = await dispatch(fromApi.actions.searchAssetApi(action.payload));
 		dispatch(actions.clearTempAssets());
 		dispatch(actions.insertAssets(res.data));
@@ -112,6 +155,23 @@ const searchAssetEffect = async ({ dispatch }, action) => {
 		dispatch(actions.stopFetch());
 	}
 	return action;
+};
+
+
+const localSearch = async ({ dispatch, getState }, action) => {
+	const a = 1;
+	return action;
+};
+
+
+const searchAssetEffect = async (store, action, next) => {
+	const state = store.getState();
+	const localState = get(state, 'nasa.assets');
+	const isRemote = selectors.isRemoteEnabled(localState);
+	if (isRemote) {
+		return remoteSearch(store, action, next);
+	}
+	return localSearch(store, action, next);
 };
 
 const selectAssetEffect = ({ dispatch, getState }, action, next) => {

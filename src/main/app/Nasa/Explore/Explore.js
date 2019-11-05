@@ -1,14 +1,12 @@
 import React, { useContext, useCallback, Fragment, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { MediaList } from '~components/media';
-import { useAppContext } from '../../../context/AppContext';
 import * as fromAssets from '~redux/nasa/assets';
 
 import styles from './Explore.module';
 
-export const Explore = () => {
-	const { selectors, dispatch } = useAppContext();
-	const assets = useSelector(selectors.nasa.assets.items);
+export const Explore = ({ assets }) => {
+	const dispatch = useDispatch();
 	const { actions: { saveAsset, likeAsset, removeAsset, dislikeAsset } } = fromAssets;
 
 	const handleAddAsset = (item) => {

@@ -105,6 +105,7 @@
     "enzyme-adapter-react-16": "^1.15.1",
     "font-awesome": "^4.7.0",
     "font-awesome-filetypes": "^2.1.0",
+    "fuse.js": "^3.4.5",
     "immutability-helper": "^3.0.1",
     "loaders.css": "^0.1.2",
     "lodash": "^4.17.15",
