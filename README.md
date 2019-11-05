@@ -1,3 +1,11 @@
+# NASA Images
+
+demo application for NASA Images using state of art pratice of react - redux - css mdules
+
+# Demo
+
+https://minhlv-nasa.firebaseapp.com/explore
+
 ### 1. Write an application in React JS:
 - The design is for reference only, feel free to use your own one: https://marvelapp.com/4f4j6j1/screen/46362067
 
@@ -26,5 +34,3 @@ GET https://images-api.nasa.gov/search?q={q}
 - React Native (you can deploy to https://expo.io/ instead of https://pages.github.com/)
 
 ### 6. Deploy your application to https://pages.github.com/ or any server that you have
-
-### 7. Push the code to git.nfq.asia. For more information please contact career@nfq.asia
