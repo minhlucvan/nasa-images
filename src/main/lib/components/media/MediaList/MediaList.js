@@ -12,7 +12,7 @@ export const MediaList = ({ items, onAddItem, onRemoveItem, onLikeItem, onDislik
 	};
 
 	const checkLoaded = () => {
-		setLoaded(loaddedItem === items.length);
+		setLoaded(items && loaddedItem === items.length);
 	};
 
 	useEffect(() => {

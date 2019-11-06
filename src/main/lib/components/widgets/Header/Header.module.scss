@@ -1,20 +1,19 @@
 .Header {
-    padding: 1rem;
-    -ms-flex-item-align: baseline;
-    align-self: baseline;
-    background-color: #fff;
-    border-bottom: 1px solid #dae0e4;
-    -webkit-box-shadow: 0 1px 4px rgba(0,0,0,.1);
-	box-shadow: 0 1px 4px rgba(0,0,0,.1);
-	.HeaderWraper {
-		max-width: 1400px;
-		margin: auto;
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		justify-content: space-between;
-		.HeaderSection {
-
-		}
-	}
+  padding: 1rem;
+  -ms-flex-item-align: baseline;
+  align-self: baseline;
+  background-color: #fff;
+  border-bottom: 1px solid #dae0e4;
+  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  .HeaderWraper {
+    max-width: 1080px;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    .HeaderSection {
+    }
+  }
 }

@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "link-module-alias",
     "start": "npm run dev",
-    "link": "link-module-alias clean",
+    "link": "link-module-alias clean && link-module-alias",
     "build": "webpack --colors=true --progress=true --cache=false --display-error-details=true --mode=development",
     "dev": "webpack-dev-server --watch --open --hot=true --colors=true --progress=true --display-error-details=true --mode=development",
     "test": "jest",
@@ -22,7 +22,8 @@
     "~helpers": "src/main/lib/helpers",
     "~redux": "src/main/redux",
     "~api": "src/main/lib/api",
-    "~hooks": "src/main/lib/hooks"
+    "~hooks": "src/main/lib/hooks",
+    "scss": "src/main/scss"
   },
   "repository": {
     "type": "git",

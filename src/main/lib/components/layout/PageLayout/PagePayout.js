@@ -2,13 +2,9 @@ import React from 'react';
 
 import styles from './PageLayout.module';
 
-export const PageLayout = ({ children, blank, loader, isEmpty, isLoading }) => (
+export const PageLayout = ({ children }) => (
 	<div className={styles.PageLayout}>
-		{!isEmpty && children}
-		{isEmpty && <div className={styles.Empty}>
-			{!isLoading && blank}
-			{isLoading && loader}
-		</div>}
+		{children}
 	</div>
 );
 

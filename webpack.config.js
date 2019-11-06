@@ -16,12 +16,22 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 /* eslint-disable prefer-destructuring */
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 	.BundleAnalyzerPlugin;
+const packageJson = require('./package.json');
 /* eslint-enable prefer-destructuring */
 
 const filenames = {
 	css: '[name].bundle.css',
 	js: '[name].bundle.js',
 };
+
+function mapModulesAlias(paths) {
+	const keys = Object.keys(paths);
+	const modules = keys.reduce((acc, curr) => {
+		acc[curr] = path.resolve(__dirname, paths[curr]);
+		return acc;
+	}, {});
+	return modules;
+}
 
 console.log('#############################################');
 console.log('');
@@ -41,7 +51,7 @@ module.exports = (env, options) => ({
 		fs: 'empty',
 	},
 	devtool:
-    options.mode === 'production' ? 'source-map' : 'cheap-module-source-map',
+		options.mode === 'production' ? 'source-map' : 'cheap-module-source-map',
 	devServer: {
 		hot: true,
 		compress: true,
@@ -78,8 +88,10 @@ module.exports = (env, options) => ({
 					{
 						loader: 'css-loader',
 						options: {
-							modules: true,
 							sourceMap: env === 'development',
+							modules: {
+								localIdentName: '[hash:base64]_[local]',
+							},
 						},
 					},
 					{
@@ -102,9 +114,9 @@ module.exports = (env, options) => ({
 						},
 					},
 					/**
-           * Commented out as we want to extract the styles into a seperate file which the mini CSS extract plugin will do.
-           * If you want to keep the styles within the scripts, comment this back in and comment out mini CSS extract plugin line below.
-           */
+					 * Commented out as we want to extract the styles into a seperate file which the mini CSS extract plugin will do.
+					 * If you want to keep the styles within the scripts, comment this back in and comment out mini CSS extract plugin line below.
+					 */
 					/*
 				{
 					loader: 'style-loader',
@@ -182,16 +194,8 @@ module.exports = (env, options) => ({
 	},
 	resolve: {
 		extensions: ['*', '.jsx', '.js', '.scss', '.css', '.html'],
-		alias: {
-			'~root': path.resolve(__dirname, '.'),
-			'~components': path.resolve(__dirname, 'src/main/lib/components'),
-			'~config': path.resolve(__dirname, 'src/main/config'),
-			'~store': path.resolve(__dirname, 'src/main/redux/store'),
-			'~helpers': path.resolve(__dirname, 'src/main/lib/helpers'),
-			'~api': path.resolve(__dirname, 'src/main/lib/api'),
-			'~redux': path.resolve(__dirname, 'src/main/redux'),
-			'~hooks': path.resolve(__dirname, 'src/main/lib/hooks'),
-		},
+		// eslint-disable-next-line no-underscore-dangle
+		alias: mapModulesAlias(packageJson._moduleAliases || {}),
 	},
 	performance: {
 		hints: false,
@@ -235,18 +239,21 @@ module.exports = (env, options) => ({
 		],
 	},
 	plugins: [
-		new webpack.NormalModuleReplacementPlugin(/\^src\/main\/(?!(?:.*\/)?config\/*$).*.js/, ((resource) => {
-			if (env === 'production') {
-				try {
-					const prodRes = resource.request.replace('.js', `.${env}.js`);
-					// eslint-disable-next-line
-					require(prodRes);
-					resource.request = prodRes;
-				} catch (e) {
-					// DO NOTHING
+		new webpack.NormalModuleReplacementPlugin(
+			/\^src\/main\/(?!(?:.*\/)?config\/*$).*.js/,
+			(resource) => {
+				if (env === 'production') {
+					try {
+						const prodRes = resource.request.replace('.js', `.${env}.js`);
+						// eslint-disable-next-line
+						require(prodRes);
+						resource.request = prodRes;
+					} catch (e) {
+						// DO NOTHING
+					}
 				}
-			}
-		})),
+			},
+		),
 		new MiniCssExtractPlugin({
 			filename: `assets/css/${filenames.css}`,
 		}),

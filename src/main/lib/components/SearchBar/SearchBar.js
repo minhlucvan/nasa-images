@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import styles from './SearchBar.module';
 
-export const SearchBar = ({ term, onSearch, onChange }) => {
+export const SearchBar = ({ term, placeholder, onSearch, onChange }) => {
 	const [value, setValue] = useState(term);
 
 	useEffect(() => {
@@ -27,6 +27,7 @@ export const SearchBar = ({ term, onSearch, onChange }) => {
 				<input type="text"
 					className={styles.SearchInput}
 					value={value}
+					placeholder={placeholder}
 					onInput={(e) => setValue(e.target.value)}
 					onChange={(e) => setValue(e.target.value)}
 					onBlur={handleChange}

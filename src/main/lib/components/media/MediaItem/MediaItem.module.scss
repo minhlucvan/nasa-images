@@ -1,3 +1,5 @@
+@import '~scss/responsive';
+
 .MediaItem {
   width: 100%;
   overflow: hidden;
@@ -70,7 +72,19 @@
   &.loading {
     opacity: 0.5;
     .ItemImageWraper {
-      min-height: 20vw;
+      min-height: 70vw;
+
+      @include respond-to(small) {
+        min-height: 36vw;
+      }
+    
+      @include respond-to(medium) {
+        min-height: 28vw;
+      }
+    
+      @include respond-to(large) {
+        min-height: 20vw;
+      }
     }
   }
   &.loaded {

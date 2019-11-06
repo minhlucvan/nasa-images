@@ -3,12 +3,14 @@ import { FaCircleNotch, FaRocket } from 'react-icons/fa';
 import isEmpty from 'lodash/isEmpty';
 import { MdSearch } from 'react-icons/md';
 import { useSelector } from 'react-redux';
-import { PageLayout } from '~components/layout/PageLayout';
+import { PageLayout, PageContent } from '~components/layout/PageLayout';
+import { ErrorLayout } from '~components/layout/ErrorLayout';
 import Explore from './Explore';
 
 import { useAppContext } from '../../../context/AppContext';
 
 import styles from './Explore.module';
+import { Loader } from '~components/loader';
 
 export const ExploreContainer = () => {
 	const { selectors } = useAppContext();
@@ -17,19 +19,23 @@ export const ExploreContainer = () => {
 	const searchTerm = useSelector(selectors.nasa.assets.searchTerm);
 
 	return (
-		<PageLayout isEmpty={isEmpty(assets)}
-			isLoading={isLoading}
-			loader={<FaCircleNotch className={styles.Loader}/>}
-			blank={
-				!searchTerm ? <div className={styles.Empty}>
-					<FaRocket className={styles.Icon}/>
-					<h1>Explore NASA Images</h1>
-				</div> : <div className={styles.Empty}>
-					<MdSearch className={styles.Icon}/>
-					<h1>No Asset found for "{searchTerm}"</h1>
-				</div>
-			}>
-			<Explore assets={assets}/>
+		<PageLayout>
+			<PageContent visible={!isEmpty(assets)}>
+				<Explore assets={assets}/>
+			</PageContent>
+			<PageContent visible={isLoading}>
+				<Loader />
+			</PageContent>
+			<PageContent visible={isEmpty(assets) && !searchTerm}>
+				<ErrorLayout
+					icon={<FaRocket className={styles.Icon}/>}
+					message="Explore NASA Images"/>
+			</PageContent>
+			<PageContent visible={isEmpty(assets) && searchTerm}>
+				<ErrorLayout
+					icon={<MdSearch className={styles.Icon}/>}
+					message={`No Asset found for "${searchTerm}"`}/>
+			</PageContent>
 		</PageLayout>
 	);
 };

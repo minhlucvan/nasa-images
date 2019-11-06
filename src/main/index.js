@@ -29,4 +29,4 @@ ReactDOM.render(
 );
 
 /* Add a service worker for Progressive Web App purposes */
-// registerServiceWorker();
+registerServiceWorker();

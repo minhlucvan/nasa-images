@@ -6,8 +6,14 @@ import Img from 'react-image';
 import { TiHeartFullOutline, TiBookmark } from 'react-icons/ti';
 import styles from './MediaItem.module';
 
-
-export const MediaItem = ({ item, onLoad, onAdd, onLike, onRemove, onDislike }) => {
+export const MediaItem = ({
+	item,
+	onLoad,
+	onAdd,
+	onLike,
+	onRemove,
+	onDislike,
+}) => {
 	const { id, caption, thumbnail, isSaved, isFavorited } = item;
 	const rootNode = useRef(null);
 	const [imgLoaded, setImgLoaded] = useState(false);
@@ -15,12 +21,12 @@ export const MediaItem = ({ item, onLoad, onAdd, onLike, onRemove, onDislike }) 
 	const { path } = useRouteMatch();
 
 	const { isVisible } = useVisibilitySensor(rootNode, {
-        intervalCheck: true,
-        scrollCheck: true,
+		intervalCheck: false,
+		scrollCheck: true,
 		resizeCheck: true,
 		shouldCheckOnMount: true,
 		partialVisibility: 'top',
-		minTopValue: -800,
+		minTopValue: -window.innerHeight,
 	});
 
 	const handleImageLoaded = () => {
@@ -55,24 +61,41 @@ export const MediaItem = ({ item, onLoad, onAdd, onLike, onRemove, onDislike }) 
 	}, [isVisible]);
 
 	return (
-		<article ref={rootNode} className={`${styles.MediaItem} ${shown && styles.shown} ${imgLoaded ? styles.loaded : styles.loading}`}>
-			<Link className={styles.ItemWraper}
+		<article
+			ref={rootNode}
+			className={`${styles.MediaItem} ${shown && styles.shown} ${
+				imgLoaded ? styles.loaded : styles.loading
+			}`}
+		>
+			<Link
+				className={styles.ItemWraper}
 				title={caption}
-				to={`${path}/asset/${id}`}>
+				to={`${path}/asset/${id}`}
+			>
 				<div className={styles.ItemMain}>
 					<div className={styles.ItemContent}>
 						<div className={styles.ItemImageWraper}>
-							{shown && <Img src={thumbnail}
-								alt={caption}
-								title={caption}
-								className={`${styles.ItemImage}`}
-								onLoad={handleImageLoaded} />}
+							{shown && (
+								<Img
+									src={thumbnail}
+									alt={caption}
+									title={caption}
+									className={`${styles.ItemImage}`}
+									onLoad={handleImageLoaded}
+								/>
+							)}
 						</div>
 						<p className={styles.ItemCaption}>{caption}</p>
 					</div>
 					<div className={styles.ItemOverlay}>
-						<TiHeartFullOutline className={`${styles.Icon} ${isFavorited ? styles.light : ''}`} onClick={isFavorited ? handleDislike : handleLike} />
-						<TiBookmark className={`${styles.Icon} ${isSaved ? styles.light : ''}`} onClick={isSaved ? handleRemove : handleAdd} />
+						<TiHeartFullOutline
+							className={`${styles.Icon} ${isFavorited ? styles.light : ''}`}
+							onClick={isFavorited ? handleDislike : handleLike}
+						/>
+						<TiBookmark
+							className={`${styles.Icon} ${isSaved ? styles.light : ''}`}
+							onClick={isSaved ? handleRemove : handleAdd}
+						/>
 					</div>
 				</div>
 			</Link>

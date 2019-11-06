@@ -42,6 +42,7 @@ const App = () => {
 							</HeaderSection>
 							<HeaderSection>
 								<SearchBar term={searchTerm}
+									placeholder="Search for images"
 									onSearch={updateSearchTerm}
 									onChange={updateSearchTerm} />
 							</HeaderSection>
