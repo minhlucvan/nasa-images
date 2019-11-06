@@ -23,7 +23,7 @@ export const ExploreContainer = () => {
 			blank={
 				!searchTerm ? <div className={styles.Empty}>
 					<FaRocket className={styles.Icon}/>
-					<h1>Explore Nasa Images</h1>
+					<h1>Explore NASA Images</h1>
 				</div> : <div className={styles.Empty}>
 					<MdSearch className={styles.Icon}/>
 					<h1>No Asset found for "{searchTerm}"</h1>

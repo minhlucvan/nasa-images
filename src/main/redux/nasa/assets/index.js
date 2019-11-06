@@ -149,6 +149,9 @@ export const reducer = createReducer(initialState, {
 	[actions.setIsFavorited]: (state, { payload }) => {
 		state.isFavorited = payload;
 	},
+	[actions.getRecentAsset]: (state, { payload }) => {
+		state.lastFetchRecent = Date.now();
+	},
 });
 
 
@@ -209,11 +212,12 @@ const getRecentAssetEffect = async ({ dispatch, getState }, action, next) => {
 	const state = getState();
 	const localState = get(state, 'nasa.assets');
 	if (selectors.shouldFetchRecent(localState)) {
+		console.log(localState);
+		next(action);
 		dispatch(actions.startFetch());
 		const res = await dispatch(fromApi.actions.getRecentAssetApi());
 		dispatch(actions.insertAssets({ ...res, isRecent: true }));
 	}
-	next(action);
 	return action;
 };
 

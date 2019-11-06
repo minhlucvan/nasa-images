@@ -1,13 +1,27 @@
-import React, { useState } from 'react';
+/* eslint-disable indent */
+import React, { useState, useRef, useLayoutEffect, useEffect } from 'react';
 import { useRouteMatch, Link } from 'react-router-dom';
+import useVisibilitySensor from '@rooks/use-visibility-sensor';
 import Img from 'react-image';
 import { TiHeartFullOutline, TiBookmark } from 'react-icons/ti';
 import styles from './MediaItem.module';
 
+
 export const MediaItem = ({ item, onLoad, onAdd, onLike, onRemove, onDislike }) => {
 	const { id, caption, thumbnail, isSaved, isFavorited } = item;
+	const rootNode = useRef(null);
 	const [imgLoaded, setImgLoaded] = useState(false);
+	const [shown, setshown] = useState(false);
 	const { path } = useRouteMatch();
+
+	const { isVisible } = useVisibilitySensor(rootNode, {
+        intervalCheck: true,
+        scrollCheck: true,
+		resizeCheck: true,
+		shouldCheckOnMount: true,
+		partialVisibility: 'top',
+		minTopValue: -800,
+	});
 
 	const handleImageLoaded = () => {
 		setImgLoaded(true);
@@ -34,19 +48,25 @@ export const MediaItem = ({ item, onLoad, onAdd, onLike, onRemove, onDislike }) 
 		onRemove(item);
 	};
 
+	useEffect(() => {
+		if (isVisible) {
+			setshown(true);
+		}
+	}, [isVisible]);
+
 	return (
-		<article className={`${styles.MediaItem} ${imgLoaded ? styles.loaded : styles.loading}`}>
+		<article ref={rootNode} className={`${styles.MediaItem} ${shown && styles.shown} ${imgLoaded ? styles.loaded : styles.loading}`}>
 			<Link className={styles.ItemWraper}
 				title={caption}
 				to={`${path}/asset/${id}`}>
 				<div className={styles.ItemMain}>
 					<div className={styles.ItemContent}>
 						<div className={styles.ItemImageWraper}>
-							<Img src={thumbnail}
+							{shown && <Img src={thumbnail}
 								alt={caption}
 								title={caption}
 								className={`${styles.ItemImage}`}
-								onLoad={handleImageLoaded} />
+								onLoad={handleImageLoaded} />}
 						</div>
 						<p className={styles.ItemCaption}>{caption}</p>
 					</div>

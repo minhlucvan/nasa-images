@@ -4,8 +4,9 @@
   "description": "react client for nasa image demo project",
   "main": "dist/index.js",
   "scripts": {
-    "preinstall": "command -v link-module-alias && link-module-alias clean || true",
     "postinstall": "link-module-alias",
+    "start": "npm run dev",
+    "link": "link-module-alias clean",
     "build": "webpack --colors=true --progress=true --cache=false --display-error-details=true --mode=development",
     "dev": "webpack-dev-server --watch --open --hot=true --colors=true --progress=true --display-error-details=true --mode=development",
     "test": "jest",
@@ -95,6 +96,7 @@
     "webpack-dev-server": "^3.9.0"
   },
   "dependencies": {
+    "@rooks/use-visibility-sensor": "^3.4.0",
     "axios": "^0.19.0",
     "babel-polyfill": "^6.26.0",
     "classlist-polyfill": "^1.2.0",

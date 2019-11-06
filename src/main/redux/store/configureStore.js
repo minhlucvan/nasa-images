@@ -19,9 +19,9 @@ const configureStore = (modules) => createStore(
 	combineStates(initialState, modules),
 	composeEnhancers(
 		applyMiddleware(...middlewares, ...combineEffects(modules)),
-		persistState('*', {
+		persistState('nasa.assets.data', {
 			key: 'nasa',
-			slicer: () => (state) => state,
+			slicer: (path) => (state) => ({ nasa: { assets: { data: state.nasa.assets.data } } }),
 		}),
 	),
 );
