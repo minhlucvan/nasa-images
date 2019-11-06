@@ -137,6 +137,9 @@ export const reducer = createReducer(initialState, {
 				}
 				data[item.id] = item;
 			}
+			if (item.isRecent) {
+				data[item.id] = item;
+			}
 		}
 		state.data = data;
 	},
@@ -212,7 +215,6 @@ const getRecentAssetEffect = async ({ dispatch, getState }, action, next) => {
 	const state = getState();
 	const localState = get(state, 'nasa.assets');
 	if (selectors.shouldFetchRecent(localState)) {
-		console.log(localState);
 		next(action);
 		dispatch(actions.startFetch());
 		const res = await dispatch(fromApi.actions.getRecentAssetApi());
