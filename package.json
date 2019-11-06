@@ -7,7 +7,7 @@
     "postinstall": "link-module-alias",
     "start": "npm run dev",
     "link": "link-module-alias clean && link-module-alias",
-    "build": "webpack --colors=true --progress=true --cache=false --display-error-details=true --mode=development",
+    "build": "webpack --colors=true --progress=true --cache=false --display-error-details=true --mode=production",
     "dev": "webpack-dev-server --watch --open --hot=true --colors=true --progress=true --display-error-details=true --mode=development",
     "test": "jest",
     "deploy": "firebase deploy",

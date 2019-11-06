@@ -239,6 +239,11 @@ module.exports = (env, options) => ({
 		],
 	},
 	plugins: [
+		new webpack.DefinePlugin({
+			'process.env': {
+				NODE_ENV: JSON.stringify(env === 'production' ? 'production' : 'development'),
+			},
+		}),
 		new webpack.NormalModuleReplacementPlugin(
 			/\^src\/main\/(?!(?:.*\/)?config\/*$).*.js/,
 			(resource) => {

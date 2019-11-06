@@ -23,7 +23,7 @@ export const ExploreContainer = () => {
 			<PageContent visible={!isEmpty(assets)}>
 				<Explore assets={assets}/>
 			</PageContent>
-			<PageContent visible={isLoading}>
+			<PageContent visible={isEmpty(assets) && isLoading}>
 				<Loader />
 			</PageContent>
 			<PageContent visible={isEmpty(assets) && !searchTerm}>

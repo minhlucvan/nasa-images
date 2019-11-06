@@ -29,4 +29,6 @@ ReactDOM.render(
 );
 
 /* Add a service worker for Progressive Web App purposes */
-registerServiceWorker();
+if (process.env.NODE_ENV === 'production') {
+	registerServiceWorker();
+}
