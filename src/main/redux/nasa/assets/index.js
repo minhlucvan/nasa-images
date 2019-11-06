@@ -38,25 +38,29 @@ export const initialState = {
 	lastFetchRecent: null,
 };
 
-
 export const selectors = {
 	root: (state) => state.assets,
 	selected: (state) => state.data[state.selectedId],
 	searchTerm: (state) => state.searchTerm,
-	shouldFetchRecent: (state) => !state.lastFetchRecent || (!state.searchTerm && (Date.now() - state.lastFetchRecent) * 0.001 > 5 * 60),
+	shouldFetchRecent: (state) => !state.lastFetchRecent
+		|| (!state.searchTerm
+			&& (Date.now() - state.lastFetchRecent) * 0.001 > 5 * 60),
 	isFetching: (state) => state.isFetching,
 	hasItem: (id) => (state) => !!state.data[id],
 	isRemoteEnabled: (state) => state.remoteEnabled,
 	isFavorited: (state) => state.isFavorited,
 	items: (state) => {
-		let items = Object.values(state.data)
-			.filter((it) => {
-				const remoteFilter = state.remoteEnabled && !!it.temp;
-				const recentFilter = !state.searchTerm && !!it.isRecent;
-				const localFilter = !state.remoteEnabled && !it.temp && it.isSaved;
-				const favoritedFilter = !state.isFavorited || it.isFavorited;
-				return (remoteFilter && recentFilter) || (localFilter && favoritedFilter);
-			});
+		let items = Object.values(state.data).filter((it) => {
+			const remoteFilter = state.remoteEnabled && !!it.temp;
+			const recentFilter = !state.searchTerm && !!it.isRecent;
+			const searchFilter = state.searchTerm && !it.isRecent;
+			const localFilter = !state.remoteEnabled && !it.temp && it.isSaved;
+			const favoritedFilter = !state.isFavorited || it.isFavorited;
+			return (
+				(remoteFilter && (recentFilter || searchFilter))
+				|| (localFilter && favoritedFilter)
+			);
+		});
 		if (!state.remoteEnabled && state.searchTerm) {
 			const options = {
 				keys: ['caption', 'description'],
@@ -75,19 +79,20 @@ export const selectors = {
 	},
 };
 
-
 export const reducer = createReducer(initialState, {
 	[actions.insertAssets]: (state, { payload }) => {
-		const { data: items, isRecent } = payload;
+		const { data: items, recent } = payload;
 		// eslint-disable-next-line no-restricted-syntax
 		for (const item of items) {
 			const oldItem = state.data[item.id];
 			let isSaved = false;
 			let isFavorited = false;
+			let isRecent = recent;
 			const temp = true;
 			if (oldItem) {
-				isSaved = oldItem.isSaved;
-				isFavorited = oldItem.isFavorited;
+				isSaved = oldItem.isSaved || false;
+				isFavorited = oldItem.isFavorited || false;
+				isRecent = oldItem.isRecent || false;
 			}
 			state.data[item.id] = { ...item, isFavorited, isSaved, temp, isRecent };
 		}
@@ -157,13 +162,12 @@ export const reducer = createReducer(initialState, {
 	},
 });
 
-
 const remoteSearch = async ({ dispatch }, action, next) => {
 	try {
 		dispatch(actions.startFetch());
 		next(action);
-		const res = await dispatch(fromApi.actions.searchAssetApi(action.payload));
 		dispatch(actions.clearTempAssets());
+		const res = await dispatch(fromApi.actions.searchAssetApi(action.payload));
 		dispatch(actions.insertAssets(res));
 		return res;
 	} catch (e) {
@@ -174,12 +178,10 @@ const remoteSearch = async ({ dispatch }, action, next) => {
 	return action;
 };
 
-
 const localSearch = async ({ dispatch, getState }, action) => {
 	const a = 1;
 	return action;
 };
-
 
 const searchAssetEffect = async (store, action, next) => {
 	const state = store.getState();
@@ -218,11 +220,10 @@ const getRecentAssetEffect = async ({ dispatch, getState }, action, next) => {
 		next(action);
 		dispatch(actions.startFetch());
 		const res = await dispatch(fromApi.actions.getRecentAssetApi());
-		dispatch(actions.insertAssets({ ...res, isRecent: true }));
+		dispatch(actions.insertAssets({ ...res, recent: true }));
 	}
 	return action;
 };
-
 
 export const effects = {
 	[actions.searchAsset]: searchAssetEffect,
