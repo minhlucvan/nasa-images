@@ -16,11 +16,6 @@ export const CollectionContext = ({ children }) => {
 
 	dispatch(fromAssets.actions.clearTempAssets());
 	dispatch(fromAssets.actions.setRemote(false));
-	dispatch(fromAssets.actions.updateSearchTerm(''));
-
-	useEffect(() => {
-		// updateSearchTerm('');
-	}, [pathname]);
 
 	useEffect(() => {
 		dispatch(fromAssets.actions.setIsFavorited(isHeart));

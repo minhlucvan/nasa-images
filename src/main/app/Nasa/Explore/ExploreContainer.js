@@ -19,7 +19,6 @@ export const ExploreContainer = () => {
 	const assets = useSelector(selectors.nasa.assets.items);
 	const isLoading = useSelector(selectors.nasa.assets.isFetching);
 	const searchTerm = useSelector(selectors.nasa.assets.searchTerm);
-
 	return (
 		<PageLayout>
 			<PageContent visible={!isEmpty(assets)}>

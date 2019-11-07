@@ -21,7 +21,7 @@ export const CollectionContainer = ({ children }) => {
 	const assets = useSelector(selectors.nasa.assets.items);
 	return (
 		<PageLayout>
-			<PageContent isEmpty={!isEmpty(assets)}>
+			<PageContent visible={!isEmpty(assets)}>
 				<Collection assets={assets}/>
 			</PageContent>
 			<PageContent visible={isEmpty(assets) && !searchTerm}>

@@ -55,10 +55,11 @@ export const selectors = {
 			const recentFilter = !state.searchTerm && !!it.isRecent;
 			const searchFilter = state.searchTerm && !it.isRecent;
 			const localFilter = !state.remoteEnabled && !it.temp && it.isSaved;
-			const favoritedFilter = !state.isFavorited || it.isFavorited;
+			const favoritedFilter = state.isFavorited && it.isFavorited;
+			const localSearchFilter = !state.isFavorited || state.searchTerm;
 			return (
 				(remoteFilter && (recentFilter || searchFilter))
-				|| (localFilter && favoritedFilter)
+				|| (localFilter && (favoritedFilter || localSearchFilter))
 			);
 		});
 		if (!state.remoteEnabled && state.searchTerm) {
@@ -136,13 +137,10 @@ export const reducer = createReducer(initialState, {
 		const data = {};
 		// eslint-disable-next-line no-restricted-syntax
 		for (const item of items) {
-			if (item.isSaved) {
-				if (item.temp) {
+			if (item.isSaved || item.isRecent) {
+				if (item.isSaved) {
 					item.temp = false;
 				}
-				data[item.id] = item;
-			}
-			if (item.isRecent) {
 				data[item.id] = item;
 			}
 		}
