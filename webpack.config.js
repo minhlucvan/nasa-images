@@ -226,6 +226,7 @@ module.exports = (env, options) => ({
 			},
 		},
 		minimizer: [
+			new TerserPlugin({ /* additional options here */ }),
 			new UglifyJsPlugin({
 				cache: true,
 				parallel: true,
@@ -238,7 +239,6 @@ module.exports = (env, options) => ({
 			}),
 			new OptimizeCSSAssetsPlugin(),
 			new MinifyPlugin(),
-			new TerserPlugin({ /* additional options here */ }),
 		],
 	},
 	plugins: [

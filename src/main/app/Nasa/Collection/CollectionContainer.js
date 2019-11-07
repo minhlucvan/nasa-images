@@ -27,13 +27,13 @@ export const CollectionContainer = ({ children }) => {
 			<PageContent visible={isEmpty(assets) && !searchTerm}>
 				<ErrorLayout
 					// eslint-disable-next-line camelcase
-					icon={<Icon icon={ic_collections}/>}
-					message="Collection is empty"/>
+					icon={<Icon icon={ic_collections} size={244} />}
+					message="Your collection is empty"/>
 			</PageContent>
 			<PageContent visible={isEmpty(assets) && searchTerm}>
 				<ErrorLayout
 					// eslint-disable-next-line camelcase
-					icon={<Icon icon={ic_search} className={styles.Icon}/>}
+					icon={<Icon icon={ic_search} size={244} className={styles.Icon}/>}
 					message={`No Asset found for "${searchTerm}"`}/>
 			</PageContent>
 		</PageLayout>

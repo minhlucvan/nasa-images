@@ -91,10 +91,13 @@ export const MediaItem = ({
 					</div>
 					<div className={styles.ItemOverlay}>
 						<Icon icon={heart}
+							size={42}
 							className={`${styles.Icon} ${isFavorited ? styles.light : ''}`}
 							onClick={isFavorited ? handleDislike : handleLike}
 						/>
-						<TiBookmark icon={bookmark}
+						<Icon icon={bookmark}
+							icon={bookmark}
+							size={42}
 							className={`${styles.Icon} ${isSaved ? styles.light : ''}`}
 							onClick={isSaved ? handleRemove : handleAdd}
 						/>

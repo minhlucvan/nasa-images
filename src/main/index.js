@@ -26,7 +26,7 @@ const renderApp = () => (
 
 ReactDOM.render(
 	renderApp(),
-	document.getElementById('root'),
+	document.getElementById('app'),
 );
 
 /* Add a service worker for Progressive Web App purposes */

@@ -52,13 +52,13 @@ const App = () => {
 							<HeaderSection>
 								<div className={styles.Actions}>
 									{!isRemote && <div className={styles.PageLink} onClick={toggleHeart}>
-										<Icon icon={heart} className={`${isHeart ? styles.light : ''}`}/>
+										<Icon icon={heart} size={48} className={`${isHeart ? styles.light : ''}`}/>
 									</div>}
 									{!isRemote && <Link to='/explore' className={styles.PageLink}>
-										<Icon icon={globe} className={`${isRemote ? styles.light : ''}`} />
+										<Icon icon={globe} size={48} />
 									</Link>}
 									{isRemote && <Link to='/collection' className={styles.PageLink}>
-										<Icon icon={folderOpenO} className={`${isRemote ? styles.light : ''}`}/>
+										<Icon icon={folderOpenO} size={48} />
 									</Link>}
 								</div>
 							</HeaderSection>

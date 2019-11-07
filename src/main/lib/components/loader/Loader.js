@@ -8,10 +8,10 @@ export const Loader = () => (
 	<div className={styles.RocketLoader}>
 		<div className={styles.Loader}>
 			<div className={styles.Globe}>
-				<Icon icon={globe} className={styles.GlobeIcon} />
+				<Icon size={136} icon={globe} className={styles.GlobeIcon} />
 			</div>
 			<div className={styles.Rocket} >
-				<Icon icon={rocket} className={styles.RoketIcon} />
+				<Icon size={28} icon={rocket} className={styles.RoketIcon} />
 			</div>
 		</div>
 	</div>

@@ -30,13 +30,13 @@ export const ExploreContainer = () => {
 			</PageContent>
 			<PageContent visible={isEmpty(assets) && !searchTerm}>
 				<ErrorLayout
-					icon={<Icon icon={rocket} className={styles.Icon}/>}
+					icon={<Icon icon={rocket} size={244} className={styles.Icon}/>}
 					message="Explore NASA Images"/>
 			</PageContent>
 			<PageContent visible={isEmpty(assets) && searchTerm}>
 				<ErrorLayout
 					// eslint-disable-next-line camelcase
-					icon={<Icon icon={ic_search} className={styles.Icon}/>}
+					icon={<Icon icon={ic_search} size={244} className={styles.Icon}/>}
 					message={`No Asset found for "${searchTerm}"`}/>
 			</PageContent>
 		</PageLayout>
