@@ -9,12 +9,11 @@ const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const MinifyPlugin = require('babel-minify-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-var OfflinePlugin = require('offline-plugin');
+const OfflinePlugin = require('offline-plugin');
 /* eslint-disable prefer-destructuring */
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 	.BundleAnalyzerPlugin;
@@ -227,16 +226,6 @@ module.exports = (env, options) => ({
 		},
 		minimizer: [
 			new TerserPlugin({ /* additional options here */ }),
-			new UglifyJsPlugin({
-				cache: true,
-				parallel: true,
-				sourceMap: false,
-				uglifyOptions: {
-					compress: {
-						inline: false,
-					},
-				},
-			}),
 			new OptimizeCSSAssetsPlugin(),
 			new MinifyPlugin(),
 		],
