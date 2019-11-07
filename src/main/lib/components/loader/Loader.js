@@ -1,15 +1,17 @@
 import React from 'react';
-import { FaRocket, FaGlobeAsia } from 'react-icons/fa';
+import { Icon } from 'react-icons-kit';
+import { rocket } from 'react-icons-kit/fa/rocket';
+import { globe } from 'react-icons-kit/fa/globe';
 import styles from './Loader.module';
 
 export const Loader = () => (
 	<div className={styles.RocketLoader}>
 		<div className={styles.Loader}>
 			<div className={styles.Globe}>
-				<FaGlobeAsia className={styles.GlobeIcon} />
+				<Icon icon={globe} className={styles.GlobeIcon} />
 			</div>
 			<div className={styles.Rocket} >
-				<FaRocket className={styles.RoketIcon} />
+				<Icon icon={rocket} className={styles.RoketIcon} />
 			</div>
 		</div>
 	</div>

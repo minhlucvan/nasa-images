@@ -2,8 +2,9 @@ import 'raf/polyfill';
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import * as OfflinePluginRuntime from 'offline-plugin/runtime';
 import config from '~config';
-import registerServiceWorker from '~helpers/registerServiceWorker';
+// import registerServiceWorker from '~helpers/registerServiceWorker';
 import AppContext from './context/AppContext';
 import createModule from './redux';
 
@@ -25,10 +26,11 @@ const renderApp = () => (
 
 ReactDOM.render(
 	renderApp(),
-	document.getElementById('app'),
+	document.getElementById('root'),
 );
 
 /* Add a service worker for Progressive Web App purposes */
 if (process.env.NODE_ENV === 'production') {
-	registerServiceWorker();
+	OfflinePluginRuntime.install();
+// registerServiceWorker();
 }

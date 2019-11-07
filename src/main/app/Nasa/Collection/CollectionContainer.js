@@ -1,6 +1,10 @@
 import React, { useContext, useCallback, Fragment } from 'react';
 import isEmpty from 'lodash/isEmpty';
-import { MdCollections, MdSearch } from 'react-icons/md';
+import { Icon } from 'react-icons-kit';
+// eslint-disable-next-line camelcase
+import { ic_collections } from 'react-icons-kit/md/ic_collections';
+// eslint-disable-next-line camelcase
+import { ic_search } from 'react-icons-kit/md/ic_search';
 import { useSelector } from 'react-redux';
 
 import { PageLayout, PageContent } from '~components/layout/PageLayout';
@@ -22,12 +26,14 @@ export const CollectionContainer = ({ children }) => {
 			</PageContent>
 			<PageContent visible={isEmpty(assets) && !searchTerm}>
 				<ErrorLayout
-					icon={<MdCollections />}
+					// eslint-disable-next-line camelcase
+					icon={<Icon icon={ic_collections}/>}
 					message="Collection is empty"/>
 			</PageContent>
 			<PageContent visible={isEmpty(assets) && searchTerm}>
 				<ErrorLayout
-					icon={<MdSearch className={styles.Icon}/>}
+					// eslint-disable-next-line camelcase
+					icon={<Icon icon={ic_search} className={styles.Icon}/>}
 					message={`No Asset found for "${searchTerm}"`}/>
 			</PageContent>
 		</PageLayout>

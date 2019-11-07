@@ -3,7 +3,9 @@ import React, { useState, useRef, useLayoutEffect, useEffect } from 'react';
 import { useRouteMatch, Link } from 'react-router-dom';
 import useVisibilitySensor from '@rooks/use-visibility-sensor';
 import Img from 'react-image';
-import { TiHeartFullOutline, TiBookmark } from 'react-icons/ti';
+import { Icon } from 'react-icons-kit';
+import { heart } from 'react-icons-kit/fa/heart';
+import { bookmark } from 'react-icons-kit/fa/bookmark';
 import styles from './MediaItem.module';
 
 export const MediaItem = ({
@@ -88,11 +90,11 @@ export const MediaItem = ({
 						<p className={styles.ItemCaption}>{caption}</p>
 					</div>
 					<div className={styles.ItemOverlay}>
-						<TiHeartFullOutline
+						<Icon icon={heart}
 							className={`${styles.Icon} ${isFavorited ? styles.light : ''}`}
 							onClick={isFavorited ? handleDislike : handleLike}
 						/>
-						<TiBookmark
+						<TiBookmark icon={bookmark}
 							className={`${styles.Icon} ${isSaved ? styles.light : ''}`}
 							onClick={isSaved ? handleRemove : handleAdd}
 						/>

@@ -13,6 +13,8 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const MinifyPlugin = require('babel-minify-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+var OfflinePlugin = require('offline-plugin');
 /* eslint-disable prefer-destructuring */
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 	.BundleAnalyzerPlugin;
@@ -236,6 +238,7 @@ module.exports = (env, options) => ({
 			}),
 			new OptimizeCSSAssetsPlugin(),
 			new MinifyPlugin(),
+			new TerserPlugin({ /* additional options here */ }),
 		],
 	},
 	plugins: [
@@ -310,6 +313,7 @@ module.exports = (env, options) => ({
 				from: 'manifest.json',
 			},
 		]),
+		new OfflinePlugin(),
 		new BundleAnalyzerPlugin(),
 	],
 });

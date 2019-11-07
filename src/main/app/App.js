@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { TiWorld, TiFolderOpen, TiHeartFullOutline } from 'react-icons/ti';
+import { folderOpenO } from 'react-icons-kit/fa/folderOpenO';
+import { Icon } from 'react-icons-kit';
+import { globe } from 'react-icons-kit/fa/globe';
+import { heart } from 'react-icons-kit/fa/heart';
 
 import AjaxLoading from '~components/AjaxLoading';
 import ErrorBoundary from '~components/ErrorBoundary';
@@ -49,13 +52,13 @@ const App = () => {
 							<HeaderSection>
 								<div className={styles.Actions}>
 									{!isRemote && <div className={styles.PageLink} onClick={toggleHeart}>
-										<TiHeartFullOutline className={`${isHeart ? styles.light : ''}`}/>
+										<Icon icon={heart} className={`${isHeart ? styles.light : ''}`}/>
 									</div>}
 									{!isRemote && <Link to='/explore' className={styles.PageLink}>
-										<TiWorld />
+										<Icon icon={globe} className={`${isRemote ? styles.light : ''}`} />
 									</Link>}
 									{isRemote && <Link to='/collection' className={styles.PageLink}>
-										<TiFolderOpen />
+										<Icon icon={folderOpenO} className={`${isRemote ? styles.light : ''}`}/>
 									</Link>}
 								</div>
 							</HeaderSection>

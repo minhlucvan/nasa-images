@@ -1,7 +1,9 @@
 import React, { useContext, useCallback, Fragment } from 'react';
-import { FaCircleNotch, FaRocket } from 'react-icons/fa';
 import isEmpty from 'lodash/isEmpty';
-import { MdSearch } from 'react-icons/md';
+import { Icon } from 'react-icons-kit';
+// eslint-disable-next-line camelcase
+import { ic_search } from 'react-icons-kit/md/ic_search';
+import { rocket } from 'react-icons-kit/fa/rocket';
 import { useSelector } from 'react-redux';
 import { PageLayout, PageContent } from '~components/layout/PageLayout';
 import { ErrorLayout } from '~components/layout/ErrorLayout';
@@ -28,12 +30,13 @@ export const ExploreContainer = () => {
 			</PageContent>
 			<PageContent visible={isEmpty(assets) && !searchTerm}>
 				<ErrorLayout
-					icon={<FaRocket className={styles.Icon}/>}
+					icon={<Icon icon={rocket} className={styles.Icon}/>}
 					message="Explore NASA Images"/>
 			</PageContent>
 			<PageContent visible={isEmpty(assets) && searchTerm}>
 				<ErrorLayout
-					icon={<MdSearch className={styles.Icon}/>}
+					// eslint-disable-next-line camelcase
+					icon={<Icon icon={ic_search} className={styles.Icon}/>}
 					message={`No Asset found for "${searchTerm}"`}/>
 			</PageContent>
 		</PageLayout>
