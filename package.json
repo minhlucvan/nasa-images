@@ -99,7 +99,7 @@
   },
   "dependencies": {
     "@rooks/use-visibility-sensor": "^3.4.0",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "babel-polyfill": "^6.26.0",
     "classlist-polyfill": "^1.2.0",
     "core-js": "^3.3.6",
