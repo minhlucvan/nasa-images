@@ -43,7 +43,7 @@ module.exports = (env, options) => ({
 		publicPath: '/',
 		filename: `assets/js/${filenames.js}`,
 		chunkFilename: `assets/js/${filenames.js}`,
-		path: path.resolve(__dirname, 'public'),
+		path: path.resolve(__dirname, './public'),
 	},
 	watchOptions: {
 		ignored: /node_modules/,
@@ -51,7 +51,7 @@ module.exports = (env, options) => ({
 	node: {
 		fs: 'empty',
 	},
-	devtool: process.env.NODE_ENV === 'production' ? 'source-map' : 'cheap-module-source-map',
+	devtool: env === 'production' ? 'source-map' : 'cheap-module-source-map',
 	devServer: {
 		hot: true,
 		compress: true,
@@ -76,7 +76,7 @@ module.exports = (env, options) => ({
 						/* Interprets `@import` and `url()` like `import/require()` and will resolve them */
 						loader: 'css-loader',
 						options: {
-							sourceMap: true,
+							sourceMap: env === 'development',
 						},
 					},
 				],
@@ -110,7 +110,7 @@ module.exports = (env, options) => ({
 						/* Basically does what it says on the tin - watches for style changes! */
 						loader: 'css-hot-loader',
 						options: {
-							sourceMap: true,
+							sourceMap: env === 'development',
 						},
 					},
 					/**
@@ -130,7 +130,7 @@ module.exports = (env, options) => ({
 						/* Interprets `@import` and `url()` like `import/require()` and will resolve them */
 						loader: 'css-loader',
 						options: {
-							sourceMap: true,
+							sourceMap: env === 'development',
 						},
 					},
 					{
@@ -141,14 +141,14 @@ module.exports = (env, options) => ({
 								browsers: ['last 3 versions'],
 							},
 							plugins: () => [precss(), autoprefixer()],
-							sourceMap: true,
+							sourceMap: env === 'development',
 						},
 					},
 					{
 						/* Loads a SASS/SCSS file and compiles it to CSS */
 						loader: 'sass-loader',
 						options: {
-							sourceMap: true,
+							sourceMap: env === 'development',
 						},
 					},
 				],
@@ -198,7 +198,7 @@ module.exports = (env, options) => ({
 		alias: mapModulesAlias(packageJson._moduleAliases || {}),
 	},
 	performance: {
-		hints: process.env.NODE_ENV === 'production' ? 'warning' : false,
+		hints: env === 'production' ? 'warning' : false,
 	},
 	stats: {
 		colors: false,
@@ -256,12 +256,12 @@ module.exports = (env, options) => ({
 		new HtmlWebPackPlugin({
 			template: 'src/index.html',
 			filename: 'index.html',
-			hash: process.env.NODE_ENV === 'production',
+			hash: env === 'production',
 		}),
 		new HtmlWebPackPlugin({
 			template: 'src/404.html',
 			filename: '404.html',
-			hash: process.env.NODE_ENV === 'production',
+			hash: env === 'production',
 		}),
 		new webpack.ProvidePlugin({
 			$: 'jquery',
