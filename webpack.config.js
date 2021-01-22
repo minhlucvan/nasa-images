@@ -51,8 +51,7 @@ module.exports = (env, options) => ({
 	node: {
 		fs: 'empty',
 	},
-	devtool:
-		options.mode === 'production' ? 'source-map' : 'cheap-module-source-map',
+	devtool: process.env.NODE_ENV === 'production' ? 'source-map' : 'cheap-module-source-map',
 	devServer: {
 		hot: true,
 		compress: true,
@@ -199,7 +198,7 @@ module.exports = (env, options) => ({
 		alias: mapModulesAlias(packageJson._moduleAliases || {}),
 	},
 	performance: {
-		hints: false,
+		hints: process.env.NODE_ENV === 'production' ? 'warning' : false,
 	},
 	stats: {
 		colors: false,
@@ -257,12 +256,12 @@ module.exports = (env, options) => ({
 		new HtmlWebPackPlugin({
 			template: 'src/index.html',
 			filename: 'index.html',
-			hash: options.mode === 'production',
+			hash: process.env.NODE_ENV === 'production',
 		}),
 		new HtmlWebPackPlugin({
 			template: 'src/404.html',
 			filename: '404.html',
-			hash: options.mode === 'production',
+			hash: process.env.NODE_ENV === 'production',
 		}),
 		new webpack.ProvidePlugin({
 			$: 'jquery',

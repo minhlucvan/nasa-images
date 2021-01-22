@@ -15,9 +15,9 @@ export const MediaList = ({
 	onDislikeItem,
 }) => {
 
-	const handleItemLoaded = (item) => {
+	function handleItemLoaded(item) {
 		onItemLoaded(item);
-	};
+	}
 
 	return (
 		<ul
