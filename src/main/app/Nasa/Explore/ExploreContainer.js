@@ -22,12 +22,12 @@ export const ExploreContainer = () => {
 	return (
 		<PageLayout>
 			<PageContent visible={!isEmpty(assets)}>
-				<Explore assets={assets}/>
+				<Explore assets={assets} isLoading={isLoading}/>
 			</PageContent>
 			<PageContent visible={isEmpty(assets) && isLoading}>
 				<Loader />
 			</PageContent>
-			<PageContent visible={isEmpty(assets) && !searchTerm}>
+			<PageContent visible={isEmpty(assets) && !searchTerm && !isLoading}>
 				<ErrorLayout
 					icon={<Icon icon={rocket} size={244} className={styles.Icon}/>}
 					message="Explore NASA Images"/>

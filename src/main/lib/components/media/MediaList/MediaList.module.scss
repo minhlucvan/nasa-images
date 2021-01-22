@@ -27,7 +27,7 @@
 
   @include respond-to(large) {
     column-count: 4;
-    column-gap: 0rem;
+    column-gap: 1rem;
   }
 
   .MediaListItem {

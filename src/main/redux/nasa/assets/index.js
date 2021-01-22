@@ -11,6 +11,7 @@ const PREFIX = '[NASA] [ASSETS]';
 export const actions = {
 	startFetch: createAction(`${PREFIX}/startFetch`),
 	stopFetch: createAction(`${PREFIX}/stopFetch`),
+	fetchFailed: createAction(`${PREFIX}/fetchFailed`),
 	clearAssets: createAction(`${PREFIX}/clearAssets`),
 	clearTempAssets: createAction(`${PREFIX}/clearTempAssets`),
 	insertAssets: createAction(`${PREFIX}/insertAssets`),
@@ -25,6 +26,8 @@ export const actions = {
 	updateSearchTerm: createAction(`${PREFIX}/updateSearchTerm`),
 	setRemote: createAction(`${PREFIX}/setRemote`),
 	setIsFavorited: createAction(`${PREFIX}/setIsFavorited`),
+	setAssetStatus: createAction(`${PREFIX}/setAssetsStatus`),
+	loadMoreAssets: createAction(`${PREFIX}/loadMoreAssets`),
 };
 
 export const initialState = {
@@ -36,6 +39,8 @@ export const initialState = {
 	remoteEnabled: false,
 	isFavorited: false,
 	lastFetchRecent: null,
+	pageIndex: 1,
+	pageSize: 16,
 };
 
 export const selectors = {
@@ -43,12 +48,13 @@ export const selectors = {
 	selected: (state) => state.data[state.selectedId],
 	searchTerm: (state) => state.searchTerm,
 	shouldFetchRecent: (state) => !state.lastFetchRecent
-		|| (!state.searchTerm
-			&& (Date.now() - state.lastFetchRecent) * 0.001 > 5 * 60),
+	|| (!state.searchTerm
+		&& (Date.now() - state.lastFetchRecent) * 0.001 > 5 * 60),
 	isFetching: (state) => state.isFetching,
 	hasItem: (id) => (state) => !!state.data[id],
 	isRemoteEnabled: (state) => state.remoteEnabled,
 	isFavorited: (state) => state.isFavorited,
+	pageIndex: (state) => state.pageIndex,
 	items: (state) => {
 		let items = Object.values(state.data).filter((it) => {
 			const remoteFilter = state.remoteEnabled && !!it.temp;
@@ -76,7 +82,10 @@ export const selectors = {
 
 			items = fuse.search(state.searchTerm);
 		}
-		return items;
+		const { pageIndex, pageSize } = state;
+		const pageLimit = (pageIndex || 1) * (pageSize || 16);
+		const pagedItems = items.slice(0, pageLimit);
+		return pagedItems;
 	},
 };
 
@@ -95,7 +104,13 @@ export const reducer = createReducer(initialState, {
 				isFavorited = oldItem.isFavorited || false;
 				isRecent = oldItem.isRecent || false;
 			}
-			state.data[item.id] = { ...item, isFavorited, isSaved, temp, isRecent };
+			state.data[item.id] = {
+				...item,
+				isFavorited,
+				isSaved,
+				temp,
+				isRecent,
+			};
 		}
 	},
 	[actions.clearAssets]: (state) => {
@@ -158,6 +173,14 @@ export const reducer = createReducer(initialState, {
 	[actions.getRecentAsset]: (state, { payload }) => {
 		state.lastFetchRecent = Date.now();
 	},
+	[actions.setAssetStatus]: (state, { payload }) => {
+		const { id, status } = payload;
+		state.data[id].loaded = true;
+	},
+	[actions.loadMoreAssets]: (state, { payload }) => {
+		const { pageIndex } = state;
+		state.pageIndex = (pageIndex || 1) + 1;
+	},
 });
 
 const remoteSearch = async ({ dispatch }, action, next) => {
@@ -170,9 +193,11 @@ const remoteSearch = async ({ dispatch }, action, next) => {
 		return res;
 	} catch (e) {
 		console.error(e);
+		dispatch(actions.fetchFailed(e));
 	} finally {
 		dispatch(actions.stopFetch());
 	}
+
 	return action;
 };
 
@@ -215,11 +240,19 @@ const getRecentAssetEffect = async ({ dispatch, getState }, action, next) => {
 	const state = getState();
 	const localState = get(state, 'nasa.assets');
 	if (selectors.shouldFetchRecent(localState)) {
-		next(action);
-		dispatch(actions.startFetch());
-		const res = await dispatch(fromApi.actions.getRecentAssetApi());
-		dispatch(actions.insertAssets({ ...res, recent: true }));
+		try {
+			next(action);
+			dispatch(actions.startFetch());
+			const res = await dispatch(fromApi.actions.getRecentAssetApi());
+			dispatch(actions.insertAssets({ ...res, recent: true }));
+		} catch (e) {
+			console.error(e);
+			dispatch(actions.fetchFailed(e));
+		} finally {
+			dispatch(actions.stopFetch());
+		}
 	}
+
 	return action;
 };
 

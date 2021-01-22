@@ -5,10 +5,22 @@ import { MediaList } from '~components/media';
 import { useAppContext } from '../../../context/AppContext';
 import * as fromAssets from '~redux/nasa/assets';
 
+import styles from './Collection.module';
+
+
 export const Collection = ({ assets }) => {
 	const dispatch = useDispatch();
 	const { isHeart } = useAppContext();
-	const { actions: { saveAsset, likeAsset, removeAsset, dislikeAsset } } = fromAssets;
+	const {
+		actions: {
+			saveAsset,
+			likeAsset,
+			removeAsset,
+			dislikeAsset,
+			setAssetStatus,
+			loadMoreAssets,
+		},
+	} = fromAssets;
 
 	const handleAddAsset = (item) => {
 		dispatch(saveAsset(item));
@@ -26,14 +38,27 @@ export const Collection = ({ assets }) => {
 		dispatch(dislikeAsset(item));
 	};
 
+	const handleItemLoaded = (item) => {
+		dispatch(setAssetStatus(item));
+	};
+
+	const handleLoadMore = () => {
+		dispatch(loadMoreAssets());
+	};
+
 	return (
 		<div>
 			<MediaList
+				onItemLoaded={handleItemLoaded}
 				onAddItem={handleAddAsset}
 				onLikeItem={handleLikeAsset}
 				onRemoveItem={handleRemoveAsset}
 				onDislikeItem={handDislikeAsset}
-				items={assets} />
+				items={assets}
+			/>
+			<div className={styles.pageFooter} >
+				<button className={styles.LoadMore} onClick={handleLoadMore}>load more</button>
+			</div>
 		</div>
 	);
 };
